@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { Calculator, Minus, Plus, MessageCircle, Sparkles } from "lucide-react";
-import { tourPrices, vehiclePrices, buildWaUrl } from "@/lib/data";
+import { buildWaUrl } from "@/lib/data";
+import { getTourPrices, getVehiclePrices } from "@/lib/data.en";
+import { getDict, type Locale } from "@/lib/i18n";
 
 function formatIDR(amount: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -12,9 +14,12 @@ function formatIDR(amount: number) {
   }).format(amount);
 }
 
-export default function Kalkulator() {
+export default function Kalkulator({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const tourPrices = getTourPrices(locale);
+  const vehiclePrices = getVehiclePrices(locale);
   const [serviceType, setServiceType] = useState<"wisata" | "kendaraan">("wisata");
-  const [selectedTour, setSelectedTour] = useState("1day");
+  const [selectedTour, setSelectedTour] = useState("one-day-south");
   const [selectedVehicle, setSelectedVehicle] = useState("innova-reborn");
   const [days, setDays] = useState(1);
   const [pax, setPax] = useState(2);
@@ -26,16 +31,17 @@ export default function Kalkulator() {
   let details = "";
 
   if (serviceType === "wisata") {
-    const tour = tourPrices[selectedTour] || tourPrices["2d1n"];
+    const tour = tourPrices[selectedTour] || tourPrices["one-day-south"];
     title = tour.name;
     let unitPrice = tour.pricePerPax;
-    if (pax >= 5) unitPrice *= 0.9; // diskon 10%
-    else if (pax >= 3) unitPrice *= 0.95; // diskon 5%
+    if (pax >= 5) unitPrice *= 0.9; // 10% off
+    else if (pax >= 3) unitPrice *= 0.95; // 5% off
 
-    const multiplier = title.includes("2D1N") || title.includes("3D2N") || title.includes("One Day") ? 1 : days;
+    const isMultiDay = selectedTour === "2d1n" || selectedTour === "3d2n";
+    const multiplier = isMultiDay ? 1 : days;
     total = unitPrice * pax * multiplier;
 
-    details = `Layanan: Paket Wisata (${title})\nJumlah Peserta: ${pax} Orang\nDurasi: ${days} Hari\nEstimasi Biaya: ${formatIDR(
+    details = `${d.kalkulator.waServiceTour} (${title})\n${d.kalkulator.waPax}: ${pax} ${d.kalkulator.person}\n${d.kalkulator.waDuration}: ${days} ${d.kalkulator.day}\n${d.kalkulator.waEstimate}: ${formatIDR(
       total
     )}`;
   } else {
@@ -47,12 +53,12 @@ export default function Kalkulator() {
     }
     total = (veh.basePrice + driverCost) * days;
 
-    details = `Layanan: Sewa Kendaraan (${title})\nDurasi Sewa: ${days} Hari\nOpsi Driver: ${
-      withDriver && veh.type === "car" ? "Termasuk Driver + BBM" : "Lepas Kunci"
-    }\nEstimasi Biaya: ${formatIDR(total)}`;
+    details = `${d.kalkulator.waServiceRental} (${title})\n${d.kalkulator.waDuration}: ${days} ${d.kalkulator.day}\n${d.kalkulator.waDriver}: ${
+      withDriver && veh.type === "car" ? d.kalkulator.waDriverIncluded : d.kalkulator.waSelfDrive
+    }\n${d.kalkulator.waEstimate}: ${formatIDR(total)}`;
   }
 
-  const waMsg = `Halo INDOTRANS! Saya telah menghitung estimasi biaya di website:\n\n${details}\n\nMohon konfirmasi ketersediaan jadwal dan promo spesialnya. Terima kasih!`;
+  const waMsg = `${d.kalkulator.waIntro}\n\n${details}\n\n${d.kalkulator.waOutro}`;
   const waUrl = buildWaUrl(waMsg);
 
   return (
@@ -62,15 +68,12 @@ export default function Kalkulator() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="section-tag">
             <Calculator className="w-4 h-4 text-gold" />
-            Kalkulator Biaya Real-Time
+            {d.kalkulator.tag}
           </div>
           <h2 className="font-outfit text-2xl sm:text-4xl font-extrabold text-white mb-4">
-            Hitung Estimasi Biaya <span className="text-gold-gradient">Sesuai Kebutuhan</span>
+            {d.kalkulator.title1} <span className="text-gold-gradient">{d.kalkulator.title2}</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base">
-            Dapatkan gambaran biaya transparan seketika untuk paket wisata maupun sewa kendaraan,
-            lalu kirimkan langsung ke WhatsApp kami untuk diskon khusus.
-          </p>
+          <p className="text-gray-400 text-sm sm:text-base">{d.kalkulator.subtitle}</p>
         </div>
 
         {/* Card Calculator */}
@@ -81,7 +84,7 @@ export default function Kalkulator() {
               {/* Service Switch */}
               <div>
                 <label className="text-xs uppercase tracking-wider text-gray-400 font-bold block mb-2">
-                  Jenis Layanan
+                  {d.kalkulator.serviceType}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -93,7 +96,7 @@ export default function Kalkulator() {
                         : "bg-[#0a0d14] text-gray-400 hover:text-white border border-[#1a1f2e]"
                     }`}
                   >
-                    Paket Wisata
+                    {d.kalkulator.tourPackage}
                   </button>
                   <button
                     type="button"
@@ -104,7 +107,7 @@ export default function Kalkulator() {
                         : "bg-[#0a0d14] text-gray-400 hover:text-white border border-[#1a1f2e]"
                     }`}
                   >
-                    Rental Kendaraan
+                    {d.kalkulator.rental}
                   </button>
                 </div>
               </div>
@@ -113,53 +116,43 @@ export default function Kalkulator() {
               {serviceType === "wisata" ? (
                 <div>
                   <label className="text-xs uppercase tracking-wider text-gray-400 font-bold block mb-2">
-                    Pilih Paket Wisata
+                    {d.kalkulator.selectTour}
                   </label>
                   <select
                     value={selectedTour}
                     onChange={(e) => setSelectedTour(e.target.value)}
                     className="w-full bg-[#0a0d14] border border-[#1a1f2e] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold"
                   >
-                    <option value="1day">Paket 1 Hari (One Day Tour) - Rp 850.000/orang</option>
-                    <option value="2d1n">Paket 2 Hari 1 Malam (2D1N) - Rp 1.500.000/orang</option>
-                    <option value="3d2n">Paket 3 Hari 2 Malam (3D2N) Best Value - Rp 1.800.000/orang</option>
+                    {Object.entries(tourPrices).map(([key, t]) => (
+                      <option key={key} value={key}>
+                        {t.name} - {formatIDR(t.pricePerPax)}
+                        {d.common.perPerson}
+                      </option>
+                    ))}
                   </select>
                 </div>
               ) : (
                 <div>
                   <label className="text-xs uppercase tracking-wider text-gray-400 font-bold block mb-2">
-                    Pilih Kendaraan
+                    {d.kalkulator.selectVehicle}
                   </label>
                   <select
                     value={selectedVehicle}
                     onChange={(e) => setSelectedVehicle(e.target.value)}
                     className="w-full bg-[#0a0d14] border border-[#1a1f2e] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold"
                   >
-                    <option value="alphard">Toyota Alphard New (Rp 4.000.000/hari)</option>
-                    <option value="hiace-premio">Toyota HiAce Premio Luxury (Rp 1.200.000/hari)</option>
-                    <option value="fortuner-vrz">Toyota Fortuner VRZ 4x4 (Rp 1.100.000/hari)</option>
-                    <option value="hiace-commuter">Toyota HiAce Commuter (Rp 1.000.000/hari)</option>
-                    <option value="zenix">Toyota Innova Zenix Hybrid (Rp 850.000/hari)</option>
-                    <option value="innova-reborn">Toyota Innova Reborn (Rp 650.000/hari)</option>
-                    <option value="xpander">Mitsubishi Xpander Cross (Rp 450.000/hari)</option>
-                    <option value="veloz">Toyota All New Veloz (Rp 450.000/hari)</option>
-                    <option value="avanza-facelift">Toyota All New Avanza (Rp 400.000/hari)</option>
-                    <option value="xenia">Daihatsu All New Xenia (Rp 400.000/hari)</option>
-                    <option value="brio">Honda All New Brio RS (Rp 350.000/hari)</option>
-                    <option value="agya">Toyota All New Agya GR (Rp 350.000/hari)</option>
-                    <option value="pcx-160">Honda PCX 160 ABS (Rp 115.000/hari)</option>
-                    <option value="nmax-155">Yamaha NMax 155 Connected (Rp 110.000/hari)</option>
-                    <option value="stylo-160">Honda Stylo 160 Retro (Rp 110.000/hari)</option>
-                    <option value="vario">Honda Vario 160 / 125 (Rp 95.000/hari)</option>
-                    <option value="scoopy-smart">Honda Scoopy Prestige (Rp 85.000/hari)</option>
-                    <option value="beat">Honda BeAT FI eSP (Rp 75.000/hari)</option>
+                    {Object.entries(vehiclePrices).map(([key, v]) => (
+                      <option key={key} value={key}>
+                        {v.name} ({formatIDR(v.basePrice)}/{d.kalkulator.day})
+                      </option>
+                    ))}
                   </select>
                 </div>
               )}
 
               {/* Days Counter */}
               <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#0a0d14] border border-[#1a1f2e]">
-                <span className="text-sm text-white font-medium">Durasi Hari</span>
+                <span className="text-sm text-white font-medium">{d.kalkulator.days}</span>
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
@@ -182,7 +175,7 @@ export default function Kalkulator() {
               {/* Pax Counter */}
               <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#0a0d14] border border-[#1a1f2e]">
                 <span className="text-sm text-white font-medium">
-                  {serviceType === "wisata" ? "Jumlah Peserta (Orang)" : "Jumlah Penumpang"}
+                  {serviceType === "wisata" ? d.kalkulator.participants : d.kalkulator.passengers}
                 </span>
                 <div className="flex items-center gap-3">
                   <button
@@ -213,9 +206,7 @@ export default function Kalkulator() {
                       onChange={(e) => setWithDriver(e.target.checked)}
                       className="w-4 h-4 accent-gold"
                     />
-                    <span className="text-sm text-gray-300">
-                      Termasuk Driver + BBM (+Rp 150.000/hari)
-                    </span>
+                    <span className="text-sm text-gray-300">{d.kalkulator.driver}</span>
                   </label>
                 )}
             </div>
@@ -225,27 +216,27 @@ export default function Kalkulator() {
               <div>
                 <h3 className="font-outfit text-base font-bold text-white mb-4 pb-3 border-b border-[#1a1f2e] flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-gold" />
-                  Rincian Estimasi
+                  {d.kalkulator.summary}
                 </h3>
 
                 <dl className="space-y-3 text-xs sm:text-sm">
                   <div className="flex justify-between">
-                    <dt className="text-gray-400">Pilihan:</dt>
+                    <dt className="text-gray-400">{d.kalkulator.choice}</dt>
                     <dd className="text-white font-medium text-right max-w-[60%] truncate">
                       {title}
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-gray-400">Durasi:</dt>
-                    <dd className="text-white font-medium">{days} Hari</dd>
+                    <dt className="text-gray-400">{d.kalkulator.durationLabel}</dt>
+                    <dd className="text-white font-medium">{days} {d.kalkulator.day}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-gray-400">Peserta/Penumpang:</dt>
-                    <dd className="text-white font-medium">{pax} Orang</dd>
+                    <dt className="text-gray-400">{d.kalkulator.paxLabel}</dt>
+                    <dd className="text-white font-medium">{pax} {d.kalkulator.person}</dd>
                   </div>
                   {pax >= 3 && serviceType === "wisata" && (
                     <div className="flex justify-between text-emerald-400">
-                      <dt>Diskon Rombongan:</dt>
+                      <dt>{d.kalkulator.groupDiscount}</dt>
                       <dd>{pax >= 5 ? "10% OFF" : "5% OFF"}</dd>
                     </div>
                   )}
@@ -254,7 +245,7 @@ export default function Kalkulator() {
 
               <div className="pt-6 border-t border-[#1a1f2e] mt-6">
                 <div className="text-xs uppercase tracking-wider text-gray-400 font-bold mb-1">
-                  Total Estimasi Biaya
+                  {d.kalkulator.total}
                 </div>
                 <div className="text-gold font-outfit text-2xl sm:text-3xl font-extrabold mb-4">
                   {formatIDR(total)}
@@ -267,7 +258,7 @@ export default function Kalkulator() {
                   className="btn-gold w-full justify-center text-xs sm:text-sm py-3"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  Kirim Pesanan via WhatsApp
+                  {d.kalkulator.send}
                 </a>
               </div>
             </div>

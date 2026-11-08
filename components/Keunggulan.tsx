@@ -6,41 +6,14 @@ import {
   CircleDollarSign,
   Sliders,
 } from "lucide-react";
+import { getDict, type Locale } from "@/lib/i18n";
 
-const features = [
-  {
-    icon: Car,
-    title: "Armada Baru & Terawat",
-    desc: "Seluruh unit mobil dan motor tahun muda, diservis berkala di bengkel resmi, AC dingin, bersih wangi, dan disanitasi sebelum serah terima.",
-  },
-  {
-    icon: Award,
-    title: "Driver & Guide Berlisensi",
-    desc: "Pengemudi dan pemandu lokal ramah, santun, menguasai medan tanjakan Ijen & Baluran, serta siap membantu dokumentasi foto & video terbaik Anda.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Perlengkapan Ijen Lengkap",
-    desc: "Khusus pendakian Kawah Ijen, gratis Respirator Gas Mask standar internasional, senter kepala terang, dan jas hujan darurat.",
-  },
-  {
-    icon: Clock,
-    title: "Antar-Jemput 24 Jam Gratis",
-    desc: "Tiba tengah malam via Kereta Api atau mendarat di Bandara Blimbingsari? Tim INDOTRANS siap menjemput tepat waktu tanpa biaya tambahan.",
-  },
-  {
-    icon: CircleDollarSign,
-    title: "Harga Jujur & Transparan",
-    desc: "Tanpa biaya tersembunyi. Rincian BBM, tiket masuk, parkir, dan retribusi dijelaskan terbuka sejak awal tanpa pungutan mendadak di lapangan.",
-  },
-  {
-    icon: Sliders,
-    title: "Itinerary Fleksibel & Kustom",
-    desc: "Mau tambah spot kuliner Sego Tempong, hunting kopi Osing, atau singgah di pantai rahasia? Rute dapat disesuaikan dengan ritme liburan Anda.",
-  },
-];
+const icons = [Car, Award, ShieldCheck, Clock, CircleDollarSign, Sliders];
 
-export default function Keunggulan() {
+export default function Keunggulan({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const features = d.keunggulan.features.map((f, i) => ({ ...f, icon: icons[i] }));
+
   return (
     <section id="keunggulan" className="py-20 bg-[#07090d] relative">
       <div className="section-container">
@@ -48,16 +21,13 @@ export default function Keunggulan() {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="section-tag">
             <Award className="w-4 h-4 text-gold" />
-            Mengapa Memilih INDOTRANS?
+            {d.keunggulan.tag}
           </div>
           <h2 className="font-outfit text-2xl sm:text-4xl font-extrabold text-white mb-4">
-            Standar Pelayanan Prima untuk{" "}
-            <span className="text-gold-gradient">Liburan Impian Anda</span>
+            {d.keunggulan.title1}{" "}
+            <span className="text-gold-gradient">{d.keunggulan.title2}</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base">
-            Kami mengutamakan keselamatan, kenyamanan, dan pengalaman tak terlupakan dalam setiap
-            sudut keindahan Banyuwangi.
-          </p>
+          <p className="text-gray-400 text-sm sm:text-base">{d.keunggulan.subtitle}</p>
         </div>
 
         {/* Grid */}

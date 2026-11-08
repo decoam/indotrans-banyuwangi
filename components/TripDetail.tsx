@@ -15,11 +15,15 @@ import {
   ScrollText,
 } from "lucide-react";
 import { paketWisata, openTrip, buildWaUrl } from "@/lib/data";
+import { getDict, type Locale } from "@/lib/i18n";
 import TripFAQ from "./TripFAQ";
 
 type Tour = (typeof paketWisata)[number] | (typeof openTrip)[number];
 
-export default function TripDetail({ tour }: { tour: Tour }) {
+export default function TripDetail({ tour, locale = "id" }: { tour: Tour; locale?: Locale }) {
+  const d = getDict(locale);
+  const base = locale === "en" ? "/en" : "";
+  const unit = locale === "en" ? "/ person" : tour.unit;
   const waUrl = buildWaUrl(tour.waMessage);
   const isOpenTrip = tour.categories.includes("opentrip");
   const minPax = "minPax" in tour ? tour.minPax : null;
@@ -43,11 +47,11 @@ export default function TripDetail({ tour }: { tour: Tour }) {
 
         <div className="section-container relative z-10">
           <Link
-            href="/#paket-wisata"
+            href={`${base}/#paket-wisata`}
             className="inline-flex items-center gap-2 text-xs font-semibold text-gray-300 hover:text-gold mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Kembali ke Paket Wisata
+            {d.trip.back}
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -77,16 +81,16 @@ export default function TripDetail({ tour }: { tour: Tour }) {
           <div className="flex flex-wrap items-end gap-6 mb-6">
             <div>
               <span className="text-[10px] uppercase tracking-wider text-gray-400 block">
-                Harga {isOpenTrip ? "WNI" : ""}
+                {isOpenTrip ? d.trip.priceWni : d.trip.pricePackage}
               </span>
               <div className="font-outfit text-2xl sm:text-3xl font-black text-gold">
                 {tour.hargaDisplay}
-                <span className="text-sm text-gray-400 font-normal ml-1">{tour.unit}</span>
+                <span className="text-sm text-gray-400 font-normal ml-1">{unit}</span>
               </div>
               {hargaWna && (
                 <div className="text-xs text-gray-400 mt-1">
-                  WNA: <span className="text-gold font-semibold">{hargaWna}</span>
-                  {tour.unit}
+                  {d.trip.priceWna}: <span className="text-gold font-semibold">{hargaWna}</span>
+                  {unit}
                 </div>
               )}
             </div>
@@ -98,7 +102,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-[#07090d] bg-gold-gradient shadow-gold hover:brightness-110 transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-[#07090d]" />
-              Pesan via WhatsApp
+              {d.trip.order}
             </a>
           </div>
         </div>
@@ -113,7 +117,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
             <section className="rounded-2xl bg-[#0f1218] border border-[#1a1f2e] p-6">
               <h2 className="font-outfit text-lg font-bold text-white mb-4 flex items-center gap-2">
                 <Compass className="w-5 h-5 text-gold" />
-                Destinasi & Rute
+                {d.trip.destination}
               </h2>
               <div className="space-y-2">
                 {tour.routes.map((r, i) => (
@@ -135,7 +139,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
           <section className="rounded-2xl bg-[#0f1218] border border-[#1a1f2e] p-6">
             <h2 className="font-outfit text-lg font-bold text-white mb-5 flex items-center gap-2">
               <CalendarDays className="w-5 h-5 text-gold" />
-              Rundown Perjalanan
+              {d.trip.rundown}
             </h2>
             <ol className="relative border-l border-[#1a1f2e] ml-2 space-y-4">
               {tour.rundown.map((item, i) => (
@@ -160,7 +164,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
             <div className="rounded-2xl bg-[#0f1218] border border-[#1a1f2e] p-6">
               <h3 className="font-outfit text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Harga Termasuk
+                {d.trip.includes}
               </h3>
               <ul className="space-y-2 text-xs text-gray-300">
                 {tour.includes.map((it, i) => (
@@ -174,7 +178,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
             <div className="rounded-2xl bg-[#0f1218] border border-[#1a1f2e] p-6">
               <h3 className="font-outfit text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <XCircle className="w-4 h-4 text-rose-400" />
-                Belum Termasuk
+                {d.trip.excludes}
               </h3>
               <ul className="space-y-2 text-xs text-gray-300">
                 {tour.excludes.map((it, i) => (
@@ -191,7 +195,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
           <section className="rounded-2xl bg-[#0f1218] border border-[#1a1f2e] p-6">
             <h2 className="font-outfit text-lg font-bold text-white mb-4 flex items-center gap-2">
               <ScrollText className="w-5 h-5 text-gold" />
-              Syarat & Ketentuan
+              {d.trip.terms}
             </h2>
             <ul className="space-y-2 text-xs text-gray-300">
               {tour.terms.map((t, i) => (
@@ -207,7 +211,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
           <section>
             <h2 className="font-outfit text-lg font-bold text-white mb-4 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-gold" />
-              Pertanyaan Umum
+              {d.trip.faqTitle}
             </h2>
             <TripFAQ items={tour.faq} />
           </section>
@@ -217,16 +221,16 @@ export default function TripDetail({ tour }: { tour: Tour }) {
         <aside className="space-y-4 lg:sticky lg:top-24 self-start">
           <div className="rounded-2xl bg-[#0f1218] border border-gold/40 p-6 shadow-gold">
             <div className="text-[10px] uppercase tracking-wider text-gray-400">
-              Harga {isOpenTrip ? "WNI" : "Paket"}
+              {isOpenTrip ? d.trip.priceWni : d.trip.pricePackage}
             </div>
             <div className="font-outfit text-2xl font-black text-gold mb-1">
               {tour.hargaDisplay}
-              <span className="text-xs text-gray-400 font-normal ml-1">{tour.unit}</span>
+              <span className="text-xs text-gray-400 font-normal ml-1">{unit}</span>
             </div>
             {hargaWna && (
               <div className="text-xs text-gray-400 mb-1">
-                WNA: <span className="text-gold font-semibold">{hargaWna}</span>
-                {tour.unit}
+                {d.trip.priceWna}: <span className="text-gold font-semibold">{hargaWna}</span>
+                {unit}
               </div>
             )}
 
@@ -244,7 +248,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
               {minPax && (
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-gold shrink-0" />
-                  <span>Minimal {minPax} peserta</span>
+                  <span>{d.trip.minPax} {minPax} {d.trip.pax}</span>
                 </div>
               )}
               <div className="flex items-start gap-2">
@@ -260,7 +264,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
               className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold text-[#07090d] bg-gold-gradient shadow-gold hover:brightness-110 transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-[#07090d]" />
-              Booking via WhatsApp
+              {d.trip.booking}
             </a>
           </div>
 
@@ -268,7 +272,7 @@ export default function TripDetail({ tour }: { tour: Tour }) {
           <div className="rounded-2xl bg-[#0f1218] border border-[#1a1f2e] p-6">
             <h3 className="font-outfit text-sm font-bold text-white mb-3 flex items-center gap-2">
               <Backpack className="w-4 h-4 text-gold" />
-              Peralatan Disiapkan
+              {d.trip.gear}
             </h3>
             <ul className="space-y-1.5 text-xs text-gray-300">
               {tour.gear.map((g, i) => (

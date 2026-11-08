@@ -3,31 +3,45 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, PhoneCall, ChevronDown } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X, PhoneCall, ChevronDown, Globe } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/data";
-
-const mainNavLinks = [
-  { href: "#home", label: "Beranda" },
-  {
-    href: "#tentang-kami",
-    label: "Tentang Kami",
-    dropdown: [
-      { href: "#tentang-kami", label: "Profil & Keunggulan" },
-      { href: "#galeri", label: "Galeri Dokumentasi" },
-      { href: "#testimoni", label: "Ulasan Wisatawan" },
-    ],
-  },
-  { href: "#paket-wisata", label: "Paket Wisata" },
-  { href: "#sewa-armada", label: "Sewa Armada" },
-  { href: "#kalkulator", label: "Hitung Biaya" },
-  { href: "#faq", label: "FAQ" },
-];
+import { getDict, getLocaleFromPath, locales, swapLocalePath, type Locale } from "@/lib/i18n";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPath(pathname);
+  const d = getDict(locale);
+  const base = locale === "en" ? "/en" : "";
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+
+  const mainNavLinks = [
+    { href: `${base}/#home`, label: d.nav.home },
+    {
+      href: `${base}/#tentang-kami`,
+      label: d.nav.about,
+      dropdown: [
+        { href: `${base}/#tentang-kami`, label: d.nav.profile },
+        { href: `${base}/#galeri`, label: d.nav.gallery },
+        { href: `${base}/#testimoni`, label: d.nav.reviews },
+      ],
+    },
+    { href: `${base}/#paket-wisata`, label: d.nav.packages },
+    { href: `${base}/#sewa-armada`, label: d.nav.fleet },
+    { href: `${base}/#kalkulator`, label: d.nav.calculator },
+    { href: `${base}/#faq`, label: d.nav.faq },
+  ];
+
+  const waMessage =
+    locale === "en"
+      ? "Hello INDOTRANS! I would like to consult about a trip / vehicle rental in Banyuwangi."
+      : "Halo INDOTRANS! Saya ingin konsultasi perjalanan / sewa armada di Banyuwangi.";
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,10 +62,6 @@ export default function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    "Halo INDOTRANS! Saya ingin konsultasi perjalanan / sewa armada di Banyuwangi."
-  )}`;
-
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -63,7 +73,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="#home" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+          <Link href={base || "/"} className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <div className="relative h-9 sm:h-11 w-auto aspect-[1347/728] overflow-hidden rounded-lg bg-black flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shrink-0">
               <Image
                 src="/INDOTRANS.png"
@@ -87,7 +97,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Nav - Rapi & Ringkas */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-7">
             {mainNavLinks.map((link) =>
               link.dropdown ? (
@@ -105,7 +115,6 @@ export default function Navbar() {
                     <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
                   </a>
 
-                  {/* Dropdown Menu */}
                   <div
                     className={`absolute top-full left-0 w-52 pt-2 transition-all duration-200 ${
                       desktopDropdownOpen
@@ -139,20 +148,53 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Action Button - Hubungi Sekarang */}
+          {/* Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setLangOpen(!langOpen)}
+                aria-label={d.nav.language}
+                aria-expanded={langOpen}
+                className="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-xs font-bold text-gray-200 bg-[#131720]/80 border border-[#1a1f2e] hover:border-gold hover:text-gold transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>{locale.toUpperCase()}</span>
+                <ChevronDown className="w-3 h-3 hidden sm:block" />
+              </button>
+              {langOpen && (
+                <div className="absolute right-0 top-full mt-2 w-44 rounded-xl bg-[#0f1218] border border-[#1a1f2e] shadow-2xl p-2 space-y-1 z-50">
+                  {locales.map((l: Locale) => (
+                    <Link
+                      key={l}
+                      href={swapLocalePath(pathname, l)}
+                      onClick={() => setLangOpen(false)}
+                      className={`block px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                        l === locale
+                          ? "text-gold bg-gold/10"
+                          : "text-gray-300 hover:text-gold hover:bg-[#131720]"
+                      }`}
+                    >
+                      {l === "id" ? d.nav.indonesian : d.nav.english}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <a
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Hubungi Sekarang via WhatsApp"
+              aria-label={`${d.nav.contactCta} via WhatsApp`}
               className="inline-flex items-center gap-2 px-2.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#07090d] bg-gold-gradient hover:brightness-110 shadow-gold transition-all duration-300"
             >
               <PhoneCall className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#07090d]" />
-              <span className="hidden sm:inline">Hubungi Sekarang</span>
+              <span className="hidden sm:inline">{d.nav.contactCta}</span>
             </a>
 
-            {/* Mobile Menu Toggle Button */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-xl text-gray-300 hover:text-gold bg-[#131720]/80 border border-[#1a1f2e] hover:border-gold/40 transition-colors"
@@ -164,12 +206,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer (Solid Background, no see-through) */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-x-0 top-full h-[calc(100vh-65px)] bg-[#07090d] border-t border-[#1a1f2e] shadow-2xl overflow-y-auto px-5 py-6 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="text-[11px] font-bold uppercase tracking-wider text-gold/80 px-3 pb-1">
-              Navigasi Menu
+              {d.nav.menu}
             </div>
 
             {mainNavLinks.map((link) =>
@@ -214,9 +256,33 @@ export default function Navbar() {
                 </a>
               )
             )}
+
+            {/* Mobile Language */}
+            <div className="pt-3">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-gold/80 px-3 pb-2">
+                {d.nav.language}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {locales.map((l: Locale) => (
+                  <Link
+                    key={l}
+                    href={swapLocalePath(pathname, l)}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold border transition-colors ${
+                      l === locale
+                        ? "bg-gold text-[#07090d] border-gold"
+                        : "bg-[#0f1218] text-gray-300 border-[#1a1f2e] hover:text-gold"
+                    }`}
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    {l === "id" ? "Indonesia" : "English"}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Bottom Mobile Drawer Call-to-action */}
+          {/* Bottom Mobile CTA */}
           <div className="pt-6 border-t border-[#1a1f2e] space-y-3 mt-6">
             <a
               href={waUrl}
@@ -226,11 +292,9 @@ export default function Navbar() {
               className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-bold text-[#07090d] bg-gold-gradient shadow-gold"
             >
               <PhoneCall className="w-4 h-4" />
-              Hubungi Sekarang via WhatsApp
+              {d.nav.mobileCta}
             </a>
-            <p className="text-center text-[11px] text-gray-500">
-              Layanan CS & Reservasi 24 Jam Nonstop
-            </p>
+            <p className="text-center text-[11px] text-gray-500">{d.nav.mobileNote}</p>
           </div>
         </div>
       )}

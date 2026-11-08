@@ -1,10 +1,39 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SITE_NAME, WHATSAPP_NUMBER } from "@/lib/data";
+import { getDict, getLocaleFromPath } from "@/lib/i18n";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPath(pathname);
+  const d = getDict(locale);
+  const base = locale === "en" ? "/en" : "";
   const currentYear = new Date().getFullYear();
+
+  const navLinks = [
+    { href: `${base}/#home`, label: d.footer.navHome },
+    { href: `${base}/#keunggulan`, label: d.footer.navAdvantages },
+    { href: `${base}/#tentang-kami`, label: d.footer.navAbout },
+    { href: `${base}/#paket-wisata`, label: d.footer.navPackages },
+    { href: `${base}/#sewa-armada`, label: d.footer.navFleet },
+    { href: `${base}/#kalkulator`, label: d.footer.navCalculator },
+    { href: `${base}/#galeri`, label: d.footer.navGallery },
+    { href: `${base}/#faq`, label: d.footer.navFaq },
+  ];
+
+  const featuredLinks = [
+    { href: `${base}/paket-wisata/one-day-south-banyuwangi`, label: d.footer.feat1 },
+    { href: `${base}/paket-wisata/one-day-menjangan-baluran`, label: d.footer.feat2 },
+    { href: `${base}/paket-wisata/2d1n`, label: d.footer.feat3 },
+    { href: `${base}/paket-wisata/3d2n`, label: d.footer.feat4 },
+    { href: `${base}/open-trip/kawah-ijen`, label: d.footer.feat5 },
+    { href: `${base}/open-trip/baluran`, label: d.footer.feat6 },
+    { href: `${base}/open-trip/menjangan-tabuhan`, label: d.footer.feat7 },
+  ];
 
   return (
     <footer className="bg-[#05070a] border-t border-[#1a1f2e] pt-16 pb-8 text-gray-400 text-xs sm:text-sm">
@@ -12,7 +41,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div>
-            <Link href="#home" className="inline-flex items-center gap-3 mb-4 group">
+            <Link href={base || "/"} className="inline-flex items-center gap-3 mb-4 group">
               <div className="relative h-10 w-auto aspect-[1347/728] overflow-hidden rounded-lg bg-black flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shrink-0">
                 <Image
                   src="/INDOTRANS.png"
@@ -31,10 +60,7 @@ export default function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="text-gray-400 text-xs leading-relaxed mb-4">
-              Penyedia jasa tour & travel serta rental mobil dan motor resmi terpercaya di
-              Banyuwangi. Mengutamakan kenyamanan, keamanan, dan kepuasan wisatawan.
-            </p>
+            <p className="text-gray-400 text-xs leading-relaxed mb-4">{d.footer.brandDesc}</p>
             <div className="flex gap-3 text-gold">
               <a
                 href="https://instagram.com"
@@ -60,49 +86,49 @@ export default function Footer() {
           {/* Nav Links */}
           <div>
             <h4 className="font-outfit text-white font-bold text-sm uppercase tracking-wider mb-4">
-              Navigasi Cepat
+              {d.footer.quickLinks}
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><a href="#home" className="hover:text-gold transition-colors">Beranda</a></li>
-              <li><a href="#keunggulan" className="hover:text-gold transition-colors">Keunggulan Layanan</a></li>
-              <li><a href="#tentang-kami" className="hover:text-gold transition-colors">Tentang Kami</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket Wisata Populer</a></li>
-              <li><a href="#sewa-armada" className="hover:text-gold transition-colors">Sewa Mobil & Motor</a></li>
-              <li><a href="#kalkulator" className="hover:text-gold transition-colors">Kalkulator Biaya</a></li>
-              <li><a href="#galeri" className="hover:text-gold transition-colors">Galeri Dokumentasi</a></li>
-              <li><a href="#faq" className="hover:text-gold transition-colors">Tanya Jawab (FAQ)</a></li>
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="hover:text-gold transition-colors">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Popular Tours */}
+          {/* Featured Tours */}
           <div>
             <h4 className="font-outfit text-white font-bold text-sm uppercase tracking-wider mb-4">
-              Destinasi Unggulan
+              {d.footer.featured}
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket 1 Hari (One Day Tour)</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket 2 Hari 1 Malam (2D1N)</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket 3 Hari 2 Malam (3D2N) Best Value</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Kawah Ijen Blue Fire</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Taman Nasional Baluran</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Pulau Menjangan & Tabuhan</a></li>
+              {featuredLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="hover:text-gold transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
             <h4 className="font-outfit text-white font-bold text-sm uppercase tracking-wider mb-4">
-              Hubungi Kami
+              {d.footer.contact}
             </h4>
             <ul className="space-y-3 text-xs">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span>Jl. Brawijaya No. 88, Kebalenan, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68416</span>
+                <span>{d.footer.address}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-gold shrink-0" />
                 <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="hover:text-gold transition-colors">
-                  +62 899-1010-528 (Admin WA)
+                  {d.footer.adminWa}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
@@ -111,7 +137,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-gold shrink-0" />
-                <span>Layanan Booking 24 Jam Nonstop</span>
+                <span>{d.footer.hours}</span>
               </li>
             </ul>
           </div>
@@ -120,12 +146,12 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-[#1a1f2e] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <div>
-            &copy; {currentYear} {SITE_NAME}. Seluruh Hak Cipta Dilindungi Undang-Undang.
+            &copy; {currentYear} {SITE_NAME}. {d.footer.rights}
           </div>
           <div className="flex items-center gap-4">
-            <span>Banyuwangi, Jawa Timur</span>
+            <span>{d.footer.location}</span>
             <span>&bull;</span>
-            <span className="text-gold">Sunrise of Java</span>
+            <span className="text-gold">{d.footer.tagline}</span>
           </div>
         </div>
       </div>

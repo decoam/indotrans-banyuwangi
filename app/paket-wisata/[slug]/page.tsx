@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { paketWisata, SITE_URL, SITE_NAME } from "@/lib/data";
+import { getPaketWisata } from "@/lib/data.en";
 import TripDetail from "@/components/TripDetail";
 
 export function generateStaticParams() {
@@ -25,7 +26,10 @@ export async function generateMetadata({
       "private trip banyuwangi",
       `${tour.shortTitle} banyuwangi`,
     ],
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: { id: url, en: `${SITE_URL}/en/paket-wisata/${tour.slug}`, "x-default": url },
+    },
     openGraph: {
       type: "article",
       url,
@@ -43,7 +47,7 @@ export async function generateMetadata({
 }
 
 export default function PaketDetailPage({ params }: { params: { slug: string } }) {
-  const tour = paketWisata.find((t) => t.slug === params.slug);
+  const tour = getPaketWisata("id").find((t) => t.slug === params.slug);
   if (!tour) notFound();
 
   const url = `${SITE_URL}/paket-wisata/${tour.slug}`;
@@ -89,7 +93,7 @@ export default function PaketDetailPage({ params }: { params: { slug: string } }
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <TripDetail tour={tour} />
+      <TripDetail tour={tour} locale="id" />
     </>
   );
 }

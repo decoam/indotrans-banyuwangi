@@ -14,7 +14,14 @@ export const metadata: Metadata = {
     "rental mobil lepas kunci banyuwangi",
     "sewa hiace banyuwangi",
   ],
-  alternates: { canonical: `${SITE_URL}/sewa-armada` },
+  alternates: {
+    canonical: `${SITE_URL}/sewa-armada`,
+    languages: {
+      id: `${SITE_URL}/sewa-armada`,
+      en: `${SITE_URL}/en/sewa-armada`,
+      "x-default": `${SITE_URL}/sewa-armada`,
+    },
+  },
   openGraph: {
     url: `${SITE_URL}/sewa-armada`,
     title: "Sewa Mobil & Motor Banyuwangi – INDOTRANS",

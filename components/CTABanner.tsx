@@ -1,10 +1,10 @@
 import { MessageCircle, Sparkles } from "lucide-react";
 import { buildWaUrl } from "@/lib/data";
+import { getDict, type Locale } from "@/lib/i18n";
 
-export default function CTABanner() {
-  const waUrl = buildWaUrl(
-    "Halo INDOTRANS! Saya ingin konsultasi liburan / sewa armada di Banyuwangi. Tolong dibantu rekomendasinya ya."
-  );
+export default function CTABanner({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const waUrl = buildWaUrl(d.cta.wa);
 
   return (
     <section className="py-20 bg-gradient-to-b from-[#0a0d14] to-[#07090d] relative overflow-hidden">
@@ -14,17 +14,16 @@ export default function CTABanner() {
       <div className="section-container relative z-10 text-center max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-gold/10 border border-gold/30 text-gold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
-          Rencanakan Liburan Impian Anda Sekarang
+          {d.cta.badge}
         </div>
 
         <h2 className="font-outfit text-3xl sm:text-5xl font-extrabold text-white mb-6 leading-tight">
-          Siap Menjelajahi Keindahan <br />
-          <span className="text-gold-gradient">Banyuwangi Bersama Kami?</span>
+          {d.cta.title1} <br />
+          <span className="text-gold-gradient">{d.cta.title2}</span>
         </h2>
 
         <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl mx-auto font-light">
-          Konsultasikan tanggal, destinasi, dan kebutuhan armada Anda secara gratis langsung ke tim
-          admin kami melalui WhatsApp.
+          {d.cta.subtitle}
         </p>
 
         <a
@@ -34,12 +33,10 @@ export default function CTABanner() {
           className="btn-gold text-sm sm:text-base px-8 py-4 text-[#07090d] font-bold shadow-gold-lg animate-pulse-gold inline-flex items-center gap-3"
         >
           <MessageCircle className="w-5 h-5" />
-          Hubungi Admin via WhatsApp Sekarang
+          {d.cta.button}
         </a>
 
-        <div className="mt-6 text-xs text-gray-500">
-          Respon cepat dalam hitungan menit &bull; Pelayanan 24 Jam
-        </div>
+        <div className="mt-6 text-xs text-gray-500">{d.cta.note}</div>
       </div>
     </section>
   );

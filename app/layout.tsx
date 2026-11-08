@@ -2,6 +2,10 @@
 import { Cinzel, Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL } from "@/lib/data";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
+import SetHtmlLang from "@/components/SetHtmlLang";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -84,6 +88,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      id: SITE_URL,
+      en: `${SITE_URL}/en`,
+      "x-default": SITE_URL,
+    },
   },
 };
 
@@ -137,7 +146,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-dark-DEFAULT text-white antialiased">{children}</body>
+      <body className="bg-dark-DEFAULT text-white antialiased">
+        <SetHtmlLang />
+        <Navbar />
+        {children}
+        <Footer />
+        <WhatsAppFloat />
+      </body>
     </html>
   );
 }

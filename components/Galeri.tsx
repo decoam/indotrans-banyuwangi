@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { Camera } from "lucide-react";
-import { galeriItems } from "@/lib/data";
+import { getGaleriItems } from "@/lib/data.en";
+import { getDict, type Locale } from "@/lib/i18n";
 
-export default function Galeri() {
+export default function Galeri({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const items = getGaleriItems(locale);
   return (
     <section id="galeri" className="py-20 bg-[#0a0d14] relative">
       <div className="section-container">
@@ -10,20 +13,17 @@ export default function Galeri() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="section-tag">
             <Camera className="w-4 h-4 text-gold" />
-            Galeri Dokumentasi
+            {d.galeri.tag}
           </div>
           <h2 className="font-outfit text-2xl sm:text-4xl font-extrabold text-white mb-4">
-            Pesona Abadi <span className="text-gold-gradient">Banyuwangi Sunrise of Java</span>
+            {d.galeri.title1} <span className="text-gold-gradient">{d.galeri.title2}</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base">
-            Setiap sudut Banyuwangi menyimpan keajaiban alami yang siap memanjakan panca indera dan
-            memori liburan Anda.
-          </p>
+          <p className="text-gray-400 text-sm sm:text-base">{d.galeri.subtitle}</p>
         </div>
 
         {/* Masonry-style Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {galeriItems.map((item, idx) => (
+          {items.map((item, idx) => (
             <div
               key={idx}
               className={`relative rounded-2xl overflow-hidden group h-72 border border-[#1a1f2e] bg-[#131720] ${

@@ -2,31 +2,11 @@
 
 import { useState } from "react";
 import { HelpCircle, ChevronDown } from "lucide-react";
+import { getDict, type Locale } from "@/lib/i18n";
 
-const faqs = [
-  {
-    q: "Bagaimana cara booking paket wisata atau sewa kendaraan di INDOTRANS?",
-    a: "Sangat mudah! Anda cukup memilih paket atau kendaraan yang diinginkan di website ini, lalu klik tombol 'Pesan' atau 'Kirim via WhatsApp'. Tim admin kami akan merespons dalam hitungan menit untuk konfirmasi tanggal, jumlah peserta, dan penjemputan.",
-  },
-  {
-    q: "Apakah biaya tour Kawah Ijen sudah termasuk masker gas respirator?",
-    a: "Ya, 100% SUDAH TERMASUK! Kami meminjamkan masker gas respirator standar internasional kualitas terbaik dan senter kepala (headlamp) terang secara gratis demi keselamatan dan kenyamanan pendakian Anda.",
-  },
-  {
-    q: "Apakah rental kendaraan bisa lepas kunci (tanpa supir)?",
-    a: "Bisa! Kami melayani rental mobil dan motor lepas kunci dengan syarat mudah (KTP, SIM A/C aktif, tiket kereta/pesawat, atau deposit jaminan). Proses verifikasi instan dan unit langsung diantar ke lokasi Anda.",
-  },
-  {
-    q: "Di mana saja titik penjemputan yang dilayani secara gratis?",
-    a: "Penjemputan gratis meliputi seluruh area Banyuwangi Kota, Stasiun Banyuwangi Kota (Karangasem), Stasiun Ketapang, Pelabuhan Ketapang, Bandara Blimbingsari, dan seluruh hotel di dalam radius Banyuwangi.",
-  },
-  {
-    q: "Apakah jadwal atau destinasi tour bisa diubah sesuai keinginan (Custom Trip)?",
-    a: "Tentu bisa! Kami sangat fleksibel. Anda dapat berkonsultasi langsung via WhatsApp dengan tim kami untuk mengatur rute khusus, durasi perjalanan, hingga spot kuliner khas Banyuwangi yang ingin dikunjungi.",
-  },
-];
-
-export default function FAQ() {
+export default function FAQ({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const faqs = d.faq.items;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -36,15 +16,12 @@ export default function FAQ() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="section-tag">
             <HelpCircle className="w-4 h-4 text-gold" />
-            Tanya Jawab
+            {d.faq.tag}
           </div>
           <h2 className="font-outfit text-2xl sm:text-4xl font-extrabold text-white mb-4">
-            Pertanyaan yang <span className="text-gold-gradient">Sering Diajukan</span>
+            {d.faq.title1} <span className="text-gold-gradient">{d.faq.title2}</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base">
-            Temukan jawaban cepat seputar reservasi, perlengkapan, dan layanan prima kami di bawah
-            ini.
-          </p>
+          <p className="text-gray-400 text-sm sm:text-base">{d.faq.subtitle}</p>
         </div>
 
         {/* Accordion List */}

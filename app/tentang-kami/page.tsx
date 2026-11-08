@@ -12,7 +12,14 @@ export const metadata: Metadata = {
     "indotrans banyuwangi",
     "jasa tour banyuwangi",
   ],
-  alternates: { canonical: `${SITE_URL}/tentang-kami` },
+  alternates: {
+    canonical: `${SITE_URL}/tentang-kami`,
+    languages: {
+      id: `${SITE_URL}/tentang-kami`,
+      en: `${SITE_URL}/en/tentang-kami`,
+      "x-default": `${SITE_URL}/tentang-kami`,
+    },
+  },
   openGraph: {
     url: `${SITE_URL}/tentang-kami`,
     title: "Tentang INDOTRANS – Tour & Travel Lokal Banyuwangi",

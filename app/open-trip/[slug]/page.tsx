@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { openTrip, SITE_URL, SITE_NAME } from "@/lib/data";
+import { getOpenTrip } from "@/lib/data.en";
 import TripDetail from "@/components/TripDetail";
 
 export function generateStaticParams() {
@@ -25,7 +26,10 @@ export async function generateMetadata({
       `${tour.shortTitle} banyuwangi`,
       "open trip murah banyuwangi",
     ],
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: { id: url, en: `${SITE_URL}/en/open-trip/${tour.slug}`, "x-default": url },
+    },
     openGraph: {
       type: "article",
       url,
@@ -43,7 +47,7 @@ export async function generateMetadata({
 }
 
 export default function OpenTripDetailPage({ params }: { params: { slug: string } }) {
-  const tour = openTrip.find((t) => t.slug === params.slug);
+  const tour = getOpenTrip("id").find((t) => t.slug === params.slug);
   if (!tour) notFound();
 
   const url = `${SITE_URL}/open-trip/${tour.slug}`;
@@ -104,7 +108,7 @@ export default function OpenTripDetailPage({ params }: { params: { slug: string 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <TripDetail tour={tour} />
+      <TripDetail tour={tour} locale="id" />
     </>
   );
 }

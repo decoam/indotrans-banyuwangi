@@ -3,12 +3,17 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Car, Bike, Check, MessageCircle, Shield } from "lucide-react";
-import { armadaMobil, armadaMotor, buildWaUrl } from "@/lib/data";
+import { buildWaUrl } from "@/lib/data";
+import { getArmadaMobil, getArmadaMotor } from "@/lib/data.en";
+import { getDict, type Locale } from "@/lib/i18n";
 
-export default function SewaArmada() {
+export default function SewaArmada({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
   const [activeTab, setActiveTab] = useState<"car" | "bike">("car");
+  const mobil = getArmadaMobil(locale);
+  const motor = getArmadaMotor(locale);
 
-  const currentList = activeTab === "car" ? armadaMobil : armadaMotor;
+  const currentList = activeTab === "car" ? mobil : motor;
 
   return (
     <section id="sewa-armada" className="py-20 bg-[#0a0d14] relative">
@@ -17,15 +22,12 @@ export default function SewaArmada() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="section-tag">
             <Shield className="w-4 h-4 text-gold" />
-            Armada Berkualitas & Bergaransi
+            {d.armada.tag}
           </div>
           <h2 className="font-outfit text-2xl sm:text-4xl font-extrabold text-white mb-4">
-            Rental Mobil & Motor <span className="text-gold-gradient">Terpercaya di Banyuwangi</span>
+            {d.armada.title1} <span className="text-gold-gradient">{d.armada.title2}</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base">
-            Armada bersih, wangi, tahun muda dengan opsi Lepas Kunci maupun Driver Ramah. Siap
-            diantar gratis ke Stasiun Banyuwangi Kota, Ketapang, atau Bandara Blimbingsari.
-          </p>
+          <p className="text-gray-400 text-sm sm:text-base">{d.armada.subtitle}</p>
         </div>
 
         {/* Category Toggle */}
@@ -39,7 +41,7 @@ export default function SewaArmada() {
             }`}
           >
             <Car className="w-4 h-4" />
-            Sewa Mobil ({armadaMobil.length} Pilihan)
+            {d.armada.carTab} ({mobil.length} {d.armada.options})
           </button>
           <button
             onClick={() => setActiveTab("bike")}
@@ -50,7 +52,7 @@ export default function SewaArmada() {
             }`}
           >
             <Bike className="w-4 h-4" />
-            Sewa Motor ({armadaMotor.length} Pilihan)
+            {d.armada.bikeTab} ({motor.length} {d.armada.options})
           </button>
         </div>
 
@@ -123,7 +125,7 @@ export default function SewaArmada() {
                       className="btn-gold text-xs px-3 py-2 shadow-sm"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
-                      Sewa
+                      {d.armada.rent}
                     </a>
                   </div>
                 </div>

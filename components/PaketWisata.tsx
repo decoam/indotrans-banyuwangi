@@ -14,22 +14,26 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { paketWisata, openTrip, buildWaUrl } from "@/lib/data";
+import { buildWaUrl } from "@/lib/data";
+import { getPaketWisata, getOpenTrip } from "@/lib/data.en";
+import { getDict, type Locale } from "@/lib/i18n";
 
-const allTours = [...paketWisata, ...openTrip];
+const filterTabs = (locale: Locale) => {
+  const d = getDict(locale);
+  return [
+    { id: "all", label: d.paket.filterAll },
+    { id: "1day", label: d.paket.filter1day },
+    { id: "2d1n", label: d.paket.filter2d1n },
+    { id: "3d2n", label: d.paket.filter3d2n },
+    { id: "opentrip", label: d.paket.filterOpen },
+  ];
+};
 
-const filterTabs = [
-  { id: "all", label: "Semua Paket" },
-  { id: "1day", label: "1 Hari" },
-  { id: "2d1n", label: "2 Hari 1 Malam" },
-  { id: "3d2n", label: "3 Hari 2 Malam" },
-  { id: "opentrip", label: "Open Trip" },
-];
-
-function routePath(tour: { slug: string; categories: string[] }) {
+function routePath(tour: { slug: string; categories: string[] }, locale: Locale) {
+  const base = locale === "en" ? "/en" : "";
   return tour.categories.includes("opentrip")
-    ? `/open-trip/${tour.slug}`
-    : `/paket-wisata/${tour.slug}`;
+    ? `${base}/open-trip/${tour.slug}`
+    : `${base}/paket-wisata/${tour.slug}`;
 }
 
 function CardSlideshow({ images, alt }: { images: string[]; alt: string }) {
@@ -106,7 +110,10 @@ function CardSlideshow({ images, alt }: { images: string[]; alt: string }) {
   );
 }
 
-export default function PaketWisata() {
+export default function PaketWisata({ locale = "id" }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const tabs = filterTabs(locale);
+  const allTours = [...getPaketWisata(locale), ...getOpenTrip(locale)];
   const [activeFilter, setActiveFilter] = useState("all");
 
   const filteredTours = allTours.filter((t) => {
@@ -123,20 +130,19 @@ export default function PaketWisata() {
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="section-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gold/10 border border-gold/30 text-gold mb-4">
             <Sparkles className="w-3.5 h-3.5 text-gold" />
-            <span>Pilihan Paket Wisata Resmi</span>
+            <span>{d.paket.tag}</span>
           </div>
           <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
-            Eksplorasi Keindahan <span className="text-gold-gradient">Banyuwangi</span>
+            {d.paket.title1} <span className="text-gold-gradient">{d.paket.title2}</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Paket private maupun open trip dengan armada prima, pemandu berlisensi, dokumentasi,
-            serta fasilitas all-in tanpa biaya tersembunyi.
+            {d.paket.subtitle}
           </p>
         </div>
 
         {/* Filter */}
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
-          {filterTabs.map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveFilter(tab.id)}
@@ -188,7 +194,7 @@ export default function PaketWisata() {
                     <div className="absolute top-3.5 left-3.5 z-10 flex flex-wrap items-center gap-1.5">
                       {isOpenTrip && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-gold text-[#07090d] shadow-sm">
-                          Open Trip
+                          {d.paket.openTrip}
                         </span>
                       )}
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-[#07090d]/80 backdrop-blur-md text-gray-200 border border-white/10 shadow-sm">
@@ -215,7 +221,7 @@ export default function PaketWisata() {
                       <div className="rounded-xl bg-[#131720] border border-[#1a1f2e] p-3.5 mb-4 space-y-1.5">
                         <div className="flex items-center gap-1.5 text-[11px] font-bold text-gold uppercase tracking-wider">
                           <Compass className="w-3.5 h-3.5" />
-                          <span>Destinasi</span>
+                          <span>{d.paket.destinations}</span>
                         </div>
                         {tour.routes.map((rt, idx) => (
                           <div key={idx} className="text-xs text-gray-400 leading-snug">
@@ -230,14 +236,14 @@ export default function PaketWisata() {
                       <div className="rounded-xl bg-[#131720] border border-[#1a1f2e] p-3.5 mb-4 space-y-1">
                         {jadwal && (
                           <div className="text-[11px] text-gray-300">
-                            <span className="font-semibold text-white">Jadwal: </span>
+                            <span className="font-semibold text-white">{d.paket.schedule}: </span>
                             {jadwal}
                           </div>
                         )}
                         {minPax && (
                           <div className="text-[11px] text-gray-300">
-                            <span className="font-semibold text-white">Minimal: </span>
-                            {minPax} peserta
+                            <span className="font-semibold text-white">{d.paket.minPax}: </span>
+                            {minPax} {d.trip.pax}
                           </div>
                         )}
                       </div>
@@ -260,7 +266,7 @@ export default function PaketWisata() {
                   <div className="mb-4 flex items-end justify-between gap-2">
                     <div>
                       <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 block">
-                        Mulai Dari
+                        {d.paket.startFrom}
                       </span>
                       <div className="flex items-baseline gap-1">
                         <span className="font-outfit text-2xl font-black text-white group-hover:text-gold transition-colors">
@@ -270,22 +276,22 @@ export default function PaketWisata() {
                       </div>
                       {hargaWna && (
                         <div className="text-[11px] text-gray-400 mt-0.5">
-                          WNA: <span className="text-gold font-semibold">{hargaWna}</span>
+                          {d.paket.wna}: <span className="text-gold font-semibold">{hargaWna}</span>
                         </div>
                       )}
                     </div>
                     <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 whitespace-nowrap">
                       <ShieldCheck className="w-3 h-3" />
-                      {isOpenTrip ? `Min. ${minPax ?? "-"} Pax` : "Private"}
+                      {isOpenTrip ? `Min. ${minPax ?? "-"} Pax` : d.paket.private}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5">
                     <Link
-                      href={routePath(tour)}
+                      href={routePath(tour, locale)}
                       className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-gray-300 bg-[#131720] border border-[#1a1f2e] hover:border-gold hover:text-white transition-all"
                     >
-                      <span>Detail</span>
+                      <span>{d.paket.detail}</span>
                       <ArrowRight className="w-3.5 h-3.5 text-gold" />
                     </Link>
                     <a
@@ -295,7 +301,7 @@ export default function PaketWisata() {
                       className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-[#07090d] bg-gold-gradient hover:brightness-110 shadow-gold transition-all"
                     >
                       <MessageCircle className="w-3.5 h-3.5 fill-[#07090d]" />
-                      <span>Pesan</span>
+                      <span>{d.paket.order}</span>
                     </a>
                   </div>
                 </div>
