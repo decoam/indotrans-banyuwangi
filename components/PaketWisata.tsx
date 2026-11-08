@@ -1,55 +1,149 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Clock, CheckCircle, MessageCircle } from "lucide-react";
-import { paketWisata, buildWaUrl } from "@/lib/data";
+import Link from "next/link";
+import {
+  Clock,
+  CheckCircle2,
+  MessageCircle,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Compass,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { paketWisata, openTrip, buildWaUrl } from "@/lib/data";
+
+const allTours = [...paketWisata, ...openTrip];
 
 const filterTabs = [
   { id: "all", label: "Semua Paket" },
-  { id: "1day", label: "1 Hari (One Day)" },
+  { id: "1day", label: "1 Hari" },
   { id: "2d1n", label: "2 Hari 1 Malam" },
   { id: "3d2n", label: "3 Hari 2 Malam" },
-  { id: "private", label: "Private Trip" },
-  { id: "adventure", label: "Adventure & Bahari" },
+  { id: "opentrip", label: "Open Trip" },
 ];
+
+function routePath(tour: { slug: string; categories: string[] }) {
+  return tour.categories.includes("opentrip")
+    ? `/open-trip/${tour.slug}`
+    : `/paket-wisata/${tour.slug}`;
+}
+
+function CardSlideshow({ images, alt }: { images: string[]; alt: string }) {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (images.length <= 1 || paused) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [images.length, paused]);
+
+  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+  const next = () => setIndex((i) => (i + 1) % images.length);
+
+  return (
+    <div
+      className="absolute inset-0"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {images.map((src, i) => (
+        <Image
+          key={src}
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className={`object-cover brightness-[0.9] contrast-[1.05] transition-all duration-700 ease-out group-hover:scale-105 ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+
+      {images.length > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Foto sebelumnya"
+            onClick={prev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-[#07090d]/70 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-gold hover:text-[#07090d] transition-all"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            aria-label="Foto berikutnya"
+            onClick={next}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-[#07090d]/70 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-gold hover:text-[#07090d] transition-all"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          <div className="absolute bottom-3 right-4 z-20 flex items-center gap-1">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Lihat foto ${i + 1}`}
+                onClick={() => setIndex(i)}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === index
+                    ? "w-5 bg-gold"
+                    : "w-1.5 bg-white/50 hover:bg-white/80"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export default function PaketWisata() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [selectedTour, setSelectedTour] = useState<(typeof paketWisata)[0] | null>(null);
 
-  const filteredTours = paketWisata.filter((t) => {
+  const filteredTours = allTours.filter((t) => {
     if (activeFilter === "all") return true;
     return t.categories.includes(activeFilter);
   });
 
   return (
-    <section id="paket-wisata" className="py-20 bg-[#07090d] relative">
-      <div className="section-container">
+    <section id="paket-wisata" className="py-24 bg-[#07090d] relative overflow-hidden">
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gold/[0.04] rounded-full blur-3xl pointer-events-none" />
+
+      <div className="section-container relative z-10">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="section-tag">
-            <span className="text-gold">✦</span> Destinasi Populer
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="section-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gold/10 border border-gold/30 text-gold mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-gold" />
+            <span>Pilihan Paket Wisata Resmi</span>
           </div>
-          <h2 className="font-outfit text-2xl sm:text-4xl font-extrabold text-white mb-4">
-            Paket Wisata <span className="text-gold-gradient">Eksklusif Banyuwangi</span>
+          <h2 className="font-outfit text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
+            Eksplorasi Keindahan <span className="text-gold-gradient">Banyuwangi</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base">
-            Pilihan paket wisata terbaik mulai dari Midnight Tour Kawah Ijen, Safari Baluran, hingga
-            petualangan bahari dan pantai eksotis dengan fasilitas all-in.
+          <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+            Paket private maupun open trip dengan armada prima, pemandu berlisensi, dokumentasi,
+            serta fasilitas all-in tanpa biaya tersembunyi.
           </p>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        {/* Filter */}
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
           {filterTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveFilter(tab.id)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${
                 activeFilter === tab.id
-                  ? "bg-gold text-[#07090d] shadow-gold"
-                  : "bg-[#131720] text-gray-400 hover:text-white border border-[#1a1f2e]"
+                  ? "bg-gold text-[#07090d] shadow-gold font-bold scale-[1.02]"
+                  : "bg-[#0f1218] text-gray-400 hover:text-white hover:bg-[#131720] border border-[#1a1f2e]"
               }`}
             >
               {tab.label}
@@ -58,192 +152,157 @@ export default function PaketWisata() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 xl:gap-8 items-stretch">
           {filteredTours.map((tour) => {
             const waUrl = buildWaUrl(tour.waMessage);
+            const isBestValue = tour.id === "3d2n";
+            const isOpenTrip = tour.categories.includes("opentrip");
+            const minPax = "minPax" in tour ? tour.minPax : null;
+            const jadwal = "jadwal" in tour ? tour.jadwal : null;
+            const hargaWna = "hargaWnaDisplay" in tour ? tour.hargaWnaDisplay : null;
+
             return (
-              <div key={tour.id} className="card-dark flex flex-col group">
-                {/* Thumbnail */}
-                <div className="relative h-56 w-full overflow-hidden">
-                  <Image
-                    src={tour.image}
-                    alt={tour.imageAlt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#131720] via-transparent to-transparent" />
-
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3">
-                    <span
-                      className={
-                        tour.badgeVariant === "bestseller"
-                          ? "badge-bestseller"
-                          : tour.badgeVariant === "exclusive"
-                          ? "badge-exclusive"
-                          : "badge-opentrip"
-                      }
-                    >
-                      {tour.badge}
-                    </span>
+              <div
+                key={tour.id}
+                className={`relative rounded-2xl bg-[#0f1218] border transition-all duration-300 flex flex-col justify-between overflow-hidden group shadow-lg ${
+                  isBestValue
+                    ? "border-gold/60 shadow-gold/20 hover:border-gold lg:-translate-y-2"
+                    : "border-[#1a1f2e] hover:border-gold/40 hover:-translate-y-1"
+                }`}
+              >
+                {isBestValue && (
+                  <div className="absolute top-0 right-0 z-20">
+                    <div className="bg-gradient-to-l from-gold to-gold-dark text-[#07090d] text-[10px] font-black tracking-wider uppercase px-4 py-1.5 rounded-bl-xl shadow-md flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3 fill-[#07090d]" />
+                      <span>Best Value</span>
+                    </div>
                   </div>
+                )}
 
-                  {/* Duration Tag */}
-                  <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-[#07090d]/80 text-gray-300 backdrop-blur-sm border border-[#1a1f2e]">
-                    <Clock className="w-3 h-3 text-gold" />
-                    {tour.duration}
-                  </div>
-                </div>
+                <div>
+                  {/* Image */}
+                  <div className="relative h-56 w-full overflow-hidden bg-[#131720]">
+                    <CardSlideshow images={tour.images} alt={tour.imageAlt} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f1218] via-[#0f1218]/30 to-transparent" />
 
-                {/* Content */}
-                <div className="p-6 flex flex-col flex-grow justify-between">
-                  <div>
-                    {/* Rating */}
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <div className="flex text-gold text-xs">
-                        {"★".repeat(Math.floor(tour.rating))}
-                      </div>
-                      <span className="text-xs text-gray-400">({tour.reviews}+ Review)</span>
+                    <div className="absolute top-3.5 left-3.5 z-10 flex flex-wrap items-center gap-1.5">
+                      {isOpenTrip && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-gold text-[#07090d] shadow-sm">
+                          Open Trip
+                        </span>
+                      )}
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-[#07090d]/80 backdrop-blur-md text-gray-200 border border-white/10 shadow-sm">
+                        <Clock className="w-3.5 h-3.5 text-gold" />
+                        {tour.duration}
+                      </span>
                     </div>
 
-                    <h3 className="font-outfit text-lg font-bold text-white mb-2 group-hover:text-gold transition-colors">
-                      {tour.title}
-                    </h3>
+                    <div className="absolute bottom-3 left-4 right-24 z-10">
+                      <h3 className="font-outfit text-xl font-bold text-white leading-snug group-hover:text-gold transition-colors">
+                        {tour.title}
+                      </h3>
+                    </div>
+                  </div>
 
-                    <p className="text-gray-400 text-xs sm:text-sm line-clamp-2 mb-4">
+                  {/* Body */}
+                  <div className="p-6">
+                    <p className="text-gray-300 text-xs sm:text-[13px] leading-relaxed mb-5 line-clamp-2">
                       {tour.desc}
                     </p>
 
+                    {/* Rute */}
+                    {"routes" in tour && tour.routes && tour.routes.length > 0 && (
+                      <div className="rounded-xl bg-[#131720] border border-[#1a1f2e] p-3.5 mb-4 space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-gold uppercase tracking-wider">
+                          <Compass className="w-3.5 h-3.5" />
+                          <span>Destinasi</span>
+                        </div>
+                        {tour.routes.map((rt, idx) => (
+                          <div key={idx} className="text-xs text-gray-400 leading-snug">
+                            {rt.destinasi}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Open trip info */}
+                    {isOpenTrip && (
+                      <div className="rounded-xl bg-[#131720] border border-[#1a1f2e] p-3.5 mb-4 space-y-1">
+                        {jadwal && (
+                          <div className="text-[11px] text-gray-300">
+                            <span className="font-semibold text-white">Jadwal: </span>
+                            {jadwal}
+                          </div>
+                        )}
+                        {minPax && (
+                          <div className="text-[11px] text-gray-300">
+                            <span className="font-semibold text-white">Minimal: </span>
+                            {minPax} peserta
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Highlights */}
-                    <ul className="space-y-1.5 mb-6 text-xs text-gray-300">
-                      {tour.highlights.map((hl, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <CheckCircle className="w-3.5 h-3.5 text-gold shrink-0" />
-                          <span className="truncate">{hl}</span>
+                    <ul className="space-y-1.5 text-xs text-gray-300">
+                      {tour.highlights.slice(0, 4).map((hl, i) => (
+                        <li key={i} className="flex items-start gap-2 leading-tight">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                          <span className="line-clamp-1">{hl}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
+                </div>
 
-                  {/* Footer */}
-                  <div className="pt-4 border-t border-[#1a1f2e] flex items-center justify-between gap-2">
+                {/* Footer */}
+                <div className="p-6 pt-4 border-t border-[#1a1f2e] bg-[#0c0f15]/50">
+                  <div className="mb-4 flex items-end justify-between gap-2">
                     <div>
-                      <span className="text-[10px] uppercase text-gray-400 block font-semibold">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 block">
                         Mulai Dari
                       </span>
-                      <div className="text-gold font-outfit text-lg font-extrabold">
-                        {tour.hargaDisplay}{" "}
-                        <span className="text-xs font-normal text-gray-400">{tour.unit}</span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="font-outfit text-2xl font-black text-white group-hover:text-gold transition-colors">
+                          {tour.hargaDisplay}
+                        </span>
+                        <span className="text-xs text-gray-400">{tour.unit}</span>
                       </div>
+                      {hargaWna && (
+                        <div className="text-[11px] text-gray-400 mt-0.5">
+                          WNA: <span className="text-gold font-semibold">{hargaWna}</span>
+                        </div>
+                      )}
                     </div>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 whitespace-nowrap">
+                      <ShieldCheck className="w-3 h-3" />
+                      {isOpenTrip ? `Min. ${minPax ?? "-"} Pax` : "Private"}
+                    </span>
+                  </div>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedTour(tour)}
-                        className="px-3 py-2 rounded-lg text-xs font-semibold text-gold border border-gold/40 hover:bg-gold/10 transition-colors"
-                      >
-                        Detail
-                      </button>
-                      <a
-                        href={waUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-gold text-xs px-3 py-2 shadow-sm"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        Pesan
-                      </a>
-                    </div>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <Link
+                      href={routePath(tour)}
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-gray-300 bg-[#131720] border border-[#1a1f2e] hover:border-gold hover:text-white transition-all"
+                    >
+                      <span>Detail</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-gold" />
+                    </Link>
+                    <a
+                      href={waUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-[#07090d] bg-gold-gradient hover:brightness-110 shadow-gold transition-all"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 fill-[#07090d]" />
+                      <span>Pesan</span>
+                    </a>
                   </div>
                 </div>
               </div>
             );
           })}
         </div>
-
-        {/* Modal Detail Tour */}
-        {selectedTour && (
-          <div
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
-            onClick={() => setSelectedTour(null)}
-          >
-            <div
-              className="card-dark max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative border-gold/40"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <span className="badge-bestseller mb-2 inline-block">{selectedTour.badge}</span>
-                  <h3 className="font-outfit text-xl sm:text-2xl font-bold text-white">
-                    {selectedTour.title}
-                  </h3>
-                  <div className="text-xs text-gold mt-1 flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5" /> {selectedTour.duration} &bull;{" "}
-                    {selectedTour.hargaDisplay} {selectedTour.unit}
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedTour(null)}
-                  className="p-1 rounded-lg text-gray-400 hover:text-white"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <p className="text-sm text-gray-300 mb-6 leading-relaxed">{selectedTour.desc}</p>
-
-              {/* Highlights */}
-              <div className="mb-6">
-                <h4 className="text-xs uppercase tracking-wider font-bold text-gold mb-2">
-                  Fasilitas Termasuk
-                </h4>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-300">
-                  {selectedTour.highlights.map((h, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <CheckCircle className="w-3.5 h-3.5 text-gold shrink-0" />
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Itinerary */}
-              <div className="mb-6">
-                <h4 className="text-xs uppercase tracking-wider font-bold text-gold mb-2">
-                  Rencana Perjalanan (Itinerary)
-                </h4>
-                <div className="space-y-2 text-xs text-gray-300">
-                  {selectedTour.itinerary.map((it, i) => (
-                    <div key={i} className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-1.5" />
-                      <span>{it}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action */}
-              <div className="pt-4 border-t border-[#1a1f2e] flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-gray-400">Harga per orang</div>
-                  <div className="text-lg font-bold text-gold font-outfit">
-                    {selectedTour.hargaDisplay}
-                  </div>
-                </div>
-                <a
-                  href={buildWaUrl(selectedTour.waMessage)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-gold text-xs"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Booking Sekarang via WhatsApp
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

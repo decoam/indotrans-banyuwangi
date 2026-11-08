@@ -75,28 +75,28 @@ export default function TentangKami() {
           <div className="card-dark p-6 sm:p-8 bg-gradient-to-br from-[#131720] to-[#0f1218] border-gold/30 shadow-gold">
             <h4 className="font-outfit text-lg font-bold text-white mb-6 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-gold" />
-              Pencapaian & Kepercayaan
+              Komitmen &amp; Layanan
             </h4>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-xl bg-[#07090d]/80 border border-[#1a1f2e]">
-                <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">12.500+</div>
-                <div className="text-xs text-gray-400 mt-1">Wisatawan Terlayani</div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#07090d]/80 border border-[#1a1f2e]">
-                <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">45+</div>
-                <div className="text-xs text-gray-400 mt-1">Armada Mobil & Motor</div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#07090d]/80 border border-[#1a1f2e]">
-                <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">100%</div>
-                <div className="text-xs text-gray-400 mt-1">Legalitas & Berizin Resmi</div>
+                <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">18+</div>
+                <div className="text-xs text-gray-400 mt-1">Armada Mobil &amp; Motor</div>
               </div>
 
               <div className="p-4 rounded-xl bg-[#07090d]/80 border border-[#1a1f2e]">
                 <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">24 Jam</div>
                 <div className="text-xs text-gray-400 mt-1">Layanan Antar Jemput</div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#07090d]/80 border border-[#1a1f2e]">
+                <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">100%</div>
+                <div className="text-xs text-gray-400 mt-1">Harga Transparan</div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#07090d]/80 border border-[#1a1f2e]">
+                <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-gold">Guide</div>
+                <div className="text-xs text-gray-400 mt-1">Lokal Berpengalaman</div>
               </div>
             </div>
 
@@ -164,55 +164,40 @@ export default function TentangKami() {
             </div>
           </div>
 
-          {/* Google Reviews Placeholder */}
+          {/* Google Reviews — menunggu verifikasi */}
           <div className="card-dark p-5 sm:p-6 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-gold fill-gold" />
+                  <Star className="w-5 h-5 text-gold" />
                   <h3 className="font-outfit text-base sm:text-lg font-bold text-white">
-                    Google Review
+                    Ulasan Google
                   </h3>
                 </div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30">
                   <Clock className="w-3 h-3" />
-                  Segera Terhubung
+                  Menunggu Verifikasi
                 </span>
               </div>
 
               <p className="text-xs text-gray-400 mb-4">
-                Ulasan langsung dari Google Review sedang dalam tahap sinkronisasi akun Google
-                Business resmi kami.
+                Ulasan resmi pelanggan akan tampil di sini setelah akun Google Business kami
+                terverifikasi. Kami memilih menampilkan ulasan asli, bukan yang dibuat-buat.
               </p>
             </div>
 
-            {/* Skeleton / Placeholder Reviews */}
-            <div className="space-y-3">
-              {[
-                { name: "Wisatawan Terverifikasi", date: "Segera Hadir", comment: "Pelayanan sangat memuaskan, unit mobil sangat nyaman dan driver hafal rute wisata Banyuwangi." },
-                { name: "Tamu Kawah Ijen", date: "Segera Hadir", comment: "Tour Kawah Ijen sangat berkesan. Masker gas sudah disediakan, sunrise-nya luar biasa indah." },
-                { name: "Keluarga Liburan", date: "Segera Hadir", comment: "Sewa HiAce untuk rombongan keluarga besar. Driver ramah, tepat waktu, dan harga transparan." },
-              ].map((rev, i) => (
-                <div key={i} className="p-3.5 rounded-xl bg-[#0a0d14] border border-[#1a1f2e] opacity-90">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-[10px] font-bold text-gold">
-                        G
-                      </div>
-                      <span className="text-xs font-semibold text-white">{rev.name}</span>
-                    </div>
-                    <div className="flex text-gold text-xs">
-                      {"★".repeat(5)}
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-gray-400 italic">&ldquo;{rev.comment}&rdquo;</p>
-                </div>
-              ))}
+            <div className="rounded-xl bg-[#0a0d14] border border-[#1a1f2e] p-5 text-center">
+              <div className="w-12 h-12 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center mx-auto mb-3">
+                <Star className="w-6 h-6 text-gold" />
+              </div>
+              <div className="text-sm font-semibold text-white mb-1">Ulasan Segera Hadir</div>
+              <div className="text-[11px] text-gray-400 leading-relaxed">
+                Punya pengalaman bersama INDOTRANS? Ceritakan lewat Google Review setelah akun kami aktif.
+              </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-[#1a1f2e] flex items-center justify-between text-xs text-gray-400">
-              <span>Rating Rata-Rata: <strong className="text-gold">5.0 / 5.0</strong></span>
-              <span className="text-[11px] text-gray-500">Live Widget Google Segera Aktif</span>
+            <div className="mt-4 pt-3 border-t border-[#1a1f2e] text-center text-[11px] text-gray-500">
+              Terima kasih atas kepercayaan Anda.
             </div>
           </div>
         </div>

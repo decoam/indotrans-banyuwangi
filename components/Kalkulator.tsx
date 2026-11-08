@@ -14,7 +14,7 @@ function formatIDR(amount: number) {
 
 export default function Kalkulator() {
   const [serviceType, setServiceType] = useState<"wisata" | "kendaraan">("wisata");
-  const [selectedTour, setSelectedTour] = useState("ijen-midnight");
+  const [selectedTour, setSelectedTour] = useState("1day");
   const [selectedVehicle, setSelectedVehicle] = useState("innova-reborn");
   const [days, setDays] = useState(1);
   const [pax, setPax] = useState(2);
@@ -26,13 +26,13 @@ export default function Kalkulator() {
   let details = "";
 
   if (serviceType === "wisata") {
-    const tour = tourPrices[selectedTour] || tourPrices["ijen-midnight"];
+    const tour = tourPrices[selectedTour] || tourPrices["2d1n"];
     title = tour.name;
     let unitPrice = tour.pricePerPax;
     if (pax >= 5) unitPrice *= 0.9; // diskon 10%
     else if (pax >= 3) unitPrice *= 0.95; // diskon 5%
 
-    const multiplier = title.includes("2D1N") || title.includes("3D2N") ? 1 : days;
+    const multiplier = title.includes("2D1N") || title.includes("3D2N") || title.includes("One Day") ? 1 : days;
     total = unitPrice * pax * multiplier;
 
     details = `Layanan: Paket Wisata (${title})\nJumlah Peserta: ${pax} Orang\nDurasi: ${days} Hari\nEstimasi Biaya: ${formatIDR(
@@ -120,12 +120,9 @@ export default function Kalkulator() {
                     onChange={(e) => setSelectedTour(e.target.value)}
                     className="w-full bg-[#0a0d14] border border-[#1a1f2e] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold"
                   >
-                    <option value="ijen-midnight">Midnight Tour Kawah Ijen (Rp 350.000/pax)</option>
-                    <option value="baluran-safari">Safari TN Baluran (Rp 375.000/pax)</option>
-                    <option value="djawatan-merah">De Djawatan & Pulau Merah (Rp 325.000/pax)</option>
-                    <option value="bwi-2d1n">Banyuwangi 2D1N (Rp 750.000/pax)</option>
-                    <option value="bwi-3d2n">Banyuwangi Ultimate 3D2N (Rp 1.350.000/pax)</option>
-                    <option value="bangsring-tabuhan">Bangsring Snorkeling (Rp 420.000/pax)</option>
+                    <option value="1day">Paket 1 Hari (One Day Tour) - Rp 850.000/orang</option>
+                    <option value="2d1n">Paket 2 Hari 1 Malam (2D1N) - Rp 1.500.000/orang</option>
+                    <option value="3d2n">Paket 3 Hari 2 Malam (3D2N) Best Value - Rp 1.800.000/orang</option>
                   </select>
                 </div>
               ) : (
@@ -138,14 +135,24 @@ export default function Kalkulator() {
                     onChange={(e) => setSelectedVehicle(e.target.value)}
                     className="w-full bg-[#0a0d14] border border-[#1a1f2e] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold"
                   >
-                    <option value="innova-reborn">Toyota Innova Reborn (Rp 650.000/hari)</option>
+                    <option value="alphard">Toyota Alphard VIP (Rp 2.500.000/hari)</option>
                     <option value="hiace-premio">Toyota HiAce Premio Luxury (Rp 1.200.000/hari)</option>
                     <option value="fortuner-vrz">Toyota Fortuner VRZ 4x4 (Rp 1.100.000/hari)</option>
+                    <option value="hiace-commuter">Toyota HiAce Commuter (Rp 1.000.000/hari)</option>
+                    <option value="zenix">Toyota Innova Zenix Hybrid (Rp 850.000/hari)</option>
+                    <option value="innova-reborn">Toyota Innova Reborn (Rp 650.000/hari)</option>
+                    <option value="xpander">Mitsubishi Xpander Cross (Rp 450.000/hari)</option>
+                    <option value="veloz">Toyota All New Veloz (Rp 450.000/hari)</option>
                     <option value="avanza-facelift">Toyota All New Avanza (Rp 400.000/hari)</option>
-                    <option value="nmax-155">Yamaha NMax 155 (Rp 110.000/hari)</option>
+                    <option value="xenia">Daihatsu All New Xenia (Rp 400.000/hari)</option>
+                    <option value="brio">Honda All New Brio RS (Rp 350.000/hari)</option>
+                    <option value="agya">Toyota All New Agya GR (Rp 350.000/hari)</option>
                     <option value="pcx-160">Honda PCX 160 ABS (Rp 115.000/hari)</option>
-                    <option value="crf-150">Honda CRF 150L Trail (Rp 160.000/hari)</option>
+                    <option value="nmax-155">Yamaha NMax 155 Connected (Rp 110.000/hari)</option>
+                    <option value="stylo-160">Honda Stylo 160 Retro (Rp 110.000/hari)</option>
+                    <option value="vario">Honda Vario 160 / 125 (Rp 95.000/hari)</option>
                     <option value="scoopy-smart">Honda Scoopy Prestige (Rp 85.000/hari)</option>
+                    <option value="beat">Honda BeAT FI eSP (Rp 75.000/hari)</option>
                   </select>
                 </div>
               )}

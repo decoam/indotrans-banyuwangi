@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Cinzel, Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL } from "@/lib/data";
@@ -27,7 +27,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "INDOTRANS Banyuwangi – Tour & Travel, Sewa Mobil Motor Terpercaya",
+    default: "INDOTRANS Banyuwangi â€“ Tour & Travel, Sewa Mobil Motor Terpercaya",
     template: "%s | INDOTRANS Banyuwangi",
   },
   description:
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     locale: "id_ID",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "INDOTRANS Banyuwangi – Tour & Travel, Sewa Mobil Motor Terpercaya",
+    title: "INDOTRANS Banyuwangi â€“ Tour & Travel, Sewa Mobil Motor Terpercaya",
     description:
       "Paket wisata Kawah Ijen Blue Fire, Safari Baluran, De Djawatan & sewa mobil motor terpercaya di Banyuwangi. Armada baru, driver berlisensi, harga transparan.",
     images: [
@@ -65,15 +65,22 @@ export const metadata: Metadata = {
         url: "/images/hero_bg.jpg",
         width: 1200,
         height: 630,
-        alt: "INDOTRANS Banyuwangi – Tour & Travel Terpercaya",
+        alt: "INDOTRANS Banyuwangi â€“ Tour & Travel Terpercaya",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "INDOTRANS Banyuwangi – Tour & Travel Terpercaya",
+    title: "INDOTRANS Banyuwangi â€“ Tour & Travel Terpercaya",
     description: "Paket wisata Kawah Ijen, Safari Baluran & sewa kendaraan di Banyuwangi.",
     images: ["/images/hero_bg.jpg"],
+  },
+  icons: {
+    icon: [
+      { url: "/INDOTRANS.png", type: "image/png" },
+    ],
+    shortcut: "/INDOTRANS.png",
+    apple: "/INDOTRANS.png",
   },
   alternates: {
     canonical: SITE_URL,
@@ -85,9 +92,9 @@ const jsonLd = {
   "@type": "TouristAgency",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
+  logo: `${SITE_URL}/INDOTRANS.png`,
   telephone: "+62-899-1010-528",
-  email: "info@indotransbanyuwangi.com",
+  email: "indotranssarana@gmail.com",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Jl. Brawijaya No. 88, Kebalenan",
@@ -107,7 +114,7 @@ const jsonLd = {
     opens: "00:00",
     closes: "23:59",
   },
-  priceRange: "Rp 85.000 – Rp 1.350.000",
+  priceRange: "Rp 250.000 – Rp 1.800.000",
   description:
     "Tour & Travel resmi dan sewa mobil motor terpercaya di Banyuwangi. Spesialis paket wisata Kawah Ijen Blue Fire, Safari Baluran, De Djawatan & Pulau Merah.",
   areaServed: "Banyuwangi, Jawa Timur, Indonesia",

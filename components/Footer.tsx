@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SITE_NAME, WHATSAPP_NUMBER } from "@/lib/data";
 
@@ -11,12 +12,23 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div>
-            <Link href="#home" className="inline-block mb-4">
-              <span className="font-cinzel text-2xl font-black tracking-widest text-white">
-                INDO<span className="text-gold-gradient">TRANS</span>
-              </span>
-              <div className="text-[9px] tracking-[0.2em] text-gray-500 uppercase">
-                Tour &bull; Travel &bull; Transport Banyuwangi
+            <Link href="#home" className="inline-flex items-center gap-3 mb-4 group">
+              <div className="relative h-10 w-auto aspect-[1347/728] overflow-hidden rounded-lg bg-transparent flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shrink-0">
+                <Image
+                  src="/INDOTRANS.png"
+                  alt="Logo INDOTRANS"
+                  width={74}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-cinzel text-xl sm:text-2xl font-black tracking-widest text-white leading-none">
+                  INDO<span className="text-gold-gradient">TRANS</span>
+                </span>
+                <span className="text-[8px] sm:text-[9px] tracking-[0.2em] text-gray-500 uppercase mt-1">
+                  Tour &bull; Travel &bull; Transport Banyuwangi
+                </span>
               </div>
             </Link>
             <p className="text-gray-400 text-xs leading-relaxed mb-4">
@@ -34,13 +46,13 @@ export default function Footer() {
                 <i className="fa-brands fa-instagram text-sm"></i>
               </a>
               <a
-                href="https://facebook.com"
+                href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#131720] border border-[#1a1f2e] flex items-center justify-center hover:border-gold transition-colors"
-                aria-label="Facebook"
+                aria-label="TikTok"
               >
-                <i className="fa-brands fa-facebook-f text-sm"></i>
+                <i className="fa-brands fa-tiktok text-sm"></i>
               </a>
             </div>
           </div>
@@ -68,12 +80,12 @@ export default function Footer() {
               Destinasi Unggulan
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Midnight Tour Kawah Ijen Blue Fire</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Safari Taman Nasional Baluran</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Hutan De Djawatan Lord of the Rings</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Pantai Pulau Merah Sunset</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Snorkeling Bangsring & Pulau Tabuhan</a></li>
-              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Offroad Meru Betiri & Penyu Sukamade</a></li>
+              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket 1 Hari (One Day Tour)</a></li>
+              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket 2 Hari 1 Malam (2D1N)</a></li>
+              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Paket 3 Hari 2 Malam (3D2N) Best Value</a></li>
+              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Kawah Ijen Blue Fire</a></li>
+              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Taman Nasional Baluran</a></li>
+              <li><a href="#paket-wisata" className="hover:text-gold transition-colors">Pulau Menjangan & Tabuhan</a></li>
             </ul>
           </div>
 
@@ -95,7 +107,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-gold shrink-0" />
-                <span>info@indotransbanyuwangi.com</span>
+                <span>indotranssarana@gmail.com</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-gold shrink-0" />
