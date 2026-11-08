@@ -184,7 +184,7 @@ export const paketWisata = [
       "Peserta wajib sehat untuk pendakian Ijen",
       "Pembatalan H-1 dikenakan biaya sesuai ketentuan",
     ],
-    gear: ["Jaket windbreaker", "Sepatu trekking", "Senter/headlamp", "Baju ganti", "Obat pribadi"],
+    gear: ["Jaket windbreaker", "Sepatu trekking", "Baju ganti", "Obat pribadi"],
     meetingPoint: "Hotel / Stasiun / Bandara area Banyuwangi Kota",
     rundown: [
       { day: "Hari 1", time: "08:00", activity: "Penjemputan & menuju De Djawatan" },
@@ -314,11 +314,12 @@ export const openTrip = [
       "Transportasi selama tour",
       "Tiket masuk Kawah Ijen",
       "Gas mask respirator",
+      "Headlamp/senter",
       "Driver as guide",
       "Air mineral & snack",
       "Antar jemput area Banyuwangi Kota",
     ],
-    excludes: ["Pengeluaran pribadi", "Asuransi", "Headlamp/senter", "Tipping guide/driver"],
+    excludes: ["Pengeluaran pribadi", "Asuransi", "Tipping guide/driver"],
     terms: [
       "Itinerary dapat berubah karena kondisi lapangan",
       "DP 30% sebagai tanda jadi, pelunasan H-1",
@@ -477,11 +478,11 @@ export const openTrip = [
 export const armadaMobil = [
   {
     id: "alphard",
-    title: "Toyota Alphard Transformer",
+    title: "Toyota Alphard New",
     badge: "Ultra Luxury VIP",
     transmission: "Automatic",
-    harga: 2500000,
-    hargaDisplay: "Rp 2.500.000",
+    harga: 4000000,
+    hargaDisplay: "Rp 4.000.000",
     unit: "/ Hari (All-In)",
     image: "/images/armada/alphard.jpg",
     imageAlt: "Sewa Toyota Alphard Banyuwangi",
@@ -496,7 +497,7 @@ export const armadaMobil = [
       "Suspensi ekstra lembut & kabin super senyap",
     ],
     waMessage:
-      "Halo INDOTRANS! Saya ingin reservasi *Sewa Toyota Alphard VIP* (Rp 2.500.000/hari). Mohon info ketersediaan unit dan jadwal. Terima kasih!",
+      "Halo INDOTRANS! Saya ingin reservasi *Sewa Toyota Alphard New* (Rp 4.000.000/hari). Mohon info ketersediaan unit dan jadwal. Terima kasih!",
   },
   {
     id: "fortuner",
@@ -905,7 +906,7 @@ export const tourPrices: Record<string, { name: string; pricePerPax: number; pri
 };
 
 export const vehiclePrices: Record<string, { name: string; basePrice: number; type: "car" | "bike" }> = {
-  "alphard": { name: "Toyota Alphard VIP Transformer", basePrice: 2500000, type: "car" },
+  "alphard": { name: "Toyota Alphard New", basePrice: 4000000, type: "car" },
   "hiace-premio": { name: "Toyota HiAce Premio Luxury (14 Seat)", basePrice: 1200000, type: "car" },
   "fortuner-vrz": { name: "Toyota Fortuner VRZ 4x4", basePrice: 1100000, type: "car" },
   "hiace-commuter": { name: "Toyota HiAce Commuter (15 Seat)", basePrice: 1000000, type: "car" },

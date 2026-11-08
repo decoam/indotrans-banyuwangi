@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link href="#home" className="inline-flex items-center gap-3 mb-4 group">
-              <div className="relative h-10 w-auto aspect-[1347/728] overflow-hidden rounded-lg bg-transparent flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shrink-0">
+              <div className="relative h-10 w-auto aspect-[1347/728] overflow-hidden rounded-lg bg-black flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shrink-0">
                 <Image
                   src="/INDOTRANS.png"
                   alt="Logo INDOTRANS"

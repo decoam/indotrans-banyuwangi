@@ -135,7 +135,7 @@ export default function Kalkulator() {
                     onChange={(e) => setSelectedVehicle(e.target.value)}
                     className="w-full bg-[#0a0d14] border border-[#1a1f2e] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold"
                   >
-                    <option value="alphard">Toyota Alphard VIP (Rp 2.500.000/hari)</option>
+                    <option value="alphard">Toyota Alphard New (Rp 4.000.000/hari)</option>
                     <option value="hiace-premio">Toyota HiAce Premio Luxury (Rp 1.200.000/hari)</option>
                     <option value="fortuner-vrz">Toyota Fortuner VRZ 4x4 (Rp 1.100.000/hari)</option>
                     <option value="hiace-commuter">Toyota HiAce Commuter (Rp 1.000.000/hari)</option>

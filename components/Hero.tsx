@@ -312,7 +312,7 @@ export default function Hero() {
                     onChange={(e) => setRentalVehicle(e.target.value)}
                     className="bg-[#131720] border border-[#1a1f2e] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-gold"
                   >
-                    <option value="Toyota Alphard VIP">Toyota Alphard VIP</option>
+                    <option value="Toyota Alphard New">Toyota Alphard New</option>
                     <option value="Toyota HiAce Premio Luxury">HiAce Premio (14 Seat)</option>
                     <option value="Toyota Fortuner VRZ">Fortuner VRZ (SUV 4x4)</option>
                     <option value="Toyota HiAce Commuter">HiAce Commuter (15 Seat)</option>
