@@ -5,6 +5,7 @@ import { Calculator, Minus, Plus, MessageCircle, Sparkles } from "lucide-react";
 import { buildWaUrl } from "@/lib/data";
 import { getTourPrices, getVehiclePrices } from "@/lib/data.en";
 import { getDict, type Locale } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 function formatIDR(amount: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -251,15 +252,17 @@ export default function Kalkulator({ locale = "id" }: { locale?: Locale }) {
                   {formatIDR(total)}
                 </div>
 
-                <a
+                <WaLink
                   href={waUrl}
+                  location="kalkulator"
+                  label={serviceType === "wisata" ? selectedTour : selectedVehicle}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-gold w-full justify-center text-xs sm:text-sm py-3"
                 >
                   <MessageCircle className="w-4 h-4" />
                   {d.kalkulator.send}
-                </a>
+                </WaLink>
               </div>
             </div>
           </div>

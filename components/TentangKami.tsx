@@ -1,6 +1,7 @@
 import { Shield, Sparkles, MapPin, Star, Clock, CheckCircle2 } from "lucide-react";
 import { buildWaUrl } from "@/lib/data";
 import { getDict, type Locale } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -52,9 +53,9 @@ export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
             </div>
 
             <div className="pt-4">
-              <a href={waContactUrl} target="_blank" rel="noopener noreferrer" className="btn-gold text-xs sm:text-sm">
+              <WaLink href={waContactUrl} location="tentang-kami" target="_blank" rel="noopener noreferrer" className="btn-gold text-xs sm:text-sm">
                 {d.tentang.cta}
-              </a>
+              </WaLink>
             </div>
           </div>
 

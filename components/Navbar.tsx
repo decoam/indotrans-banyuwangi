@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, PhoneCall, ChevronDown, Globe } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/data";
 import { getDict, getLocaleFromPath, locales, swapLocalePath, type Locale } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -183,8 +184,9 @@ export default function Navbar() {
               )}
             </div>
 
-            <a
+            <WaLink
               href={waUrl}
+              location="navbar"
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${d.nav.contactCta} via WhatsApp`}
@@ -192,7 +194,7 @@ export default function Navbar() {
             >
               <PhoneCall className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#07090d]" />
               <span className="hidden sm:inline">{d.nav.contactCta}</span>
-            </a>
+            </WaLink>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -284,8 +286,9 @@ export default function Navbar() {
 
           {/* Bottom Mobile CTA */}
           <div className="pt-6 border-t border-[#1a1f2e] space-y-3 mt-6">
-            <a
+            <WaLink
               href={waUrl}
+              location="navbar-mobile"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
@@ -293,7 +296,7 @@ export default function Navbar() {
             >
               <PhoneCall className="w-4 h-4" />
               {d.nav.mobileCta}
-            </a>
+            </WaLink>
             <p className="text-center text-[11px] text-gray-500">{d.nav.mobileNote}</p>
           </div>
         </div>

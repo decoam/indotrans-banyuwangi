@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Compass, Car, Sparkles, Send, MessageCircle } from "lucide-react";
 import { buildWaUrl, WHATSAPP_NUMBER } from "@/lib/data";
 import { getDict, type Locale } from "@/lib/i18n";
+import { trackWaClick } from "@/lib/analytics";
+import WaLink from "./WaLink";
 
 const heroSlides = [
   {
@@ -81,12 +83,14 @@ export default function Hero({ locale = "id" }: { locale?: Locale }) {
   const handleWisataSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const msg = `${d.hero.msgTour} *${wisataPkg}*:\n- ${d.hero.msgDate}: ${wisataDate || d.hero.msgNotSet}\n- ${d.hero.msgParticipants}: ${wisataPax}\n- ${d.hero.msgTripType}: ${wisataType}\n${d.hero.waWisata}`;
+    trackWaClick("hero-form-wisata", wisataPkg);
     window.open(buildWaUrl(msg), "_blank");
   };
 
   const handleRentalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const msg = `${d.hero.msgRental} *${rentalVehicle}*:\n- ${d.hero.msgRentalDate}: ${rentalDate || d.hero.msgNotSet}\n- ${d.hero.msgDuration}: ${rentalDuration}\n- ${d.hero.msgService}: ${rentalOption}\n${d.hero.waRental}`;
+    trackWaClick("hero-form-rental", rentalVehicle);
     window.open(buildWaUrl(msg), "_blank");
   };
 
@@ -157,15 +161,16 @@ export default function Hero({ locale = "id" }: { locale?: Locale }) {
 
           {/* HIGHLIGHT UTAMA: Tombol Pesan Sekarang Ditengah (Track WhatsApp) */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 w-full max-w-xl">
-            <a
+            <WaLink
               href={directWaPesanan}
+              location="hero-direct"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-black text-[#07090d] bg-gold-gradient shadow-gold-lg hover:brightness-110 hover:scale-105 transition-all duration-300 ring-2 ring-gold/40 ring-offset-4 ring-offset-[#07090d] animate-pulse-gold group"
             >
               <MessageCircle className="w-6 h-6 text-[#07090d] fill-[#07090d] group-hover:rotate-12 transition-transform" />
               <span>{d.hero.ctaWhatsapp}</span>
-            </a>
+            </WaLink>
 
             <div className="flex items-center gap-3">
               <a

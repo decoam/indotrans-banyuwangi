@@ -1,6 +1,7 @@
 import { MessageCircle, Sparkles } from "lucide-react";
 import { buildWaUrl } from "@/lib/data";
 import { getDict, type Locale } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 export default function CTABanner({ locale = "id" }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -26,15 +27,16 @@ export default function CTABanner({ locale = "id" }: { locale?: Locale }) {
           {d.cta.subtitle}
         </p>
 
-        <a
+        <WaLink
           href={waUrl}
+          location="cta-banner"
           target="_blank"
           rel="noopener noreferrer"
           className="btn-gold text-sm sm:text-base px-8 py-4 text-[#07090d] font-bold shadow-gold-lg animate-pulse-gold inline-flex items-center gap-3"
         >
           <MessageCircle className="w-5 h-5" />
           {d.cta.button}
-        </a>
+        </WaLink>
 
         <div className="mt-6 text-xs text-gray-500">{d.cta.note}</div>
       </div>

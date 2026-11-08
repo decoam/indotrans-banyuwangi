@@ -17,6 +17,7 @@ import {
 import { buildWaUrl } from "@/lib/data";
 import { getPaketWisata, getOpenTrip } from "@/lib/data.en";
 import { getDict, type Locale } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 const filterTabs = (locale: Locale) => {
   const d = getDict(locale);
@@ -294,15 +295,17 @@ export default function PaketWisata({ locale = "id" }: { locale?: Locale }) {
                       <span>{d.paket.detail}</span>
                       <ArrowRight className="w-3.5 h-3.5 text-gold" />
                     </Link>
-                    <a
+                    <WaLink
                       href={waUrl}
+                      location="paket-card"
+                      label={tour.slug}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-[#07090d] bg-gold-gradient hover:brightness-110 shadow-gold transition-all"
                     >
                       <MessageCircle className="w-3.5 h-3.5 fill-[#07090d]" />
                       <span>{d.paket.order}</span>
-                    </a>
+                    </WaLink>
                   </div>
                 </div>
               </div>

@@ -17,6 +17,7 @@ import {
 import { paketWisata, openTrip, buildWaUrl } from "@/lib/data";
 import { getDict, type Locale } from "@/lib/i18n";
 import TripFAQ from "./TripFAQ";
+import WaLink from "./WaLink";
 
 type Tour = (typeof paketWisata)[number] | (typeof openTrip)[number];
 
@@ -95,15 +96,17 @@ export default function TripDetail({ tour, locale = "id" }: { tour: Tour; locale
               )}
             </div>
 
-            <a
+            <WaLink
               href={waUrl}
+              location="trip-hero"
+              label={tour.slug}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-[#07090d] bg-gold-gradient shadow-gold hover:brightness-110 transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-[#07090d]" />
               {d.trip.order}
-            </a>
+            </WaLink>
           </div>
         </div>
       </div>
@@ -257,15 +260,17 @@ export default function TripDetail({ tour, locale = "id" }: { tour: Tour; locale
               </div>
             </div>
 
-            <a
+            <WaLink
               href={waUrl}
+              location="trip-sidebar"
+              label={tour.slug}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold text-[#07090d] bg-gold-gradient shadow-gold hover:brightness-110 transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-[#07090d]" />
               {d.trip.booking}
-            </a>
+            </WaLink>
           </div>
 
           {/* Gear */}

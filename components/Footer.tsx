@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SITE_NAME, WHATSAPP_NUMBER } from "@/lib/data";
 import { getDict, getLocaleFromPath } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -127,9 +128,9 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-gold shrink-0" />
-                <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="hover:text-gold transition-colors">
+                <WaLink href={`https://wa.me/${WHATSAPP_NUMBER}`} location="footer" className="hover:text-gold transition-colors">
                   {d.footer.adminWa}
-                </a>
+                </WaLink>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-gold shrink-0" />

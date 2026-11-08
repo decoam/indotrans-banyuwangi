@@ -6,6 +6,7 @@ import { Car, Bike, Check, MessageCircle, Shield } from "lucide-react";
 import { buildWaUrl } from "@/lib/data";
 import { getArmadaMobil, getArmadaMotor } from "@/lib/data.en";
 import { getDict, type Locale } from "@/lib/i18n";
+import WaLink from "./WaLink";
 
 export default function SewaArmada({ locale = "id" }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -118,15 +119,17 @@ export default function SewaArmada({ locale = "id" }: { locale?: Locale }) {
                       <span className="text-[10px] text-gray-400">{unit.unit}</span>
                     </div>
 
-                    <a
+                    <WaLink
                       href={waUrl}
+                      location="armada-card"
+                      label={unit.id}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-gold text-xs px-3 py-2 shadow-sm"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
                       {d.armada.rent}
-                    </a>
+                    </WaLink>
                   </div>
                 </div>
               </div>
