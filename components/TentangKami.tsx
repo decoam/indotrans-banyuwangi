@@ -1,7 +1,11 @@
-import { Shield, Sparkles, MapPin, Star, Clock, CheckCircle2 } from "lucide-react";
+import { Shield, Sparkles, MapPin, Star, CheckCircle2 } from "lucide-react";
 import { buildWaUrl } from "@/lib/data";
 import { getDict, type Locale } from "@/lib/i18n";
 import WaLink from "./WaLink";
+
+const MAPS_URL = "https://maps.app.goo.gl/bmrBKYata9K3qGBcA";
+const MAP_EMBED_URL =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3948.642993687454!2d114.3585051!3d-8.2386073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd15baac5198c1b%3A0xc1c002d38d0f4721!2sIndoTrans%20Wisata%20(Open%20Trip%20%26%20Private%20Trip%20Banyuwangi)!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid";
 
 export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -112,10 +116,15 @@ export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
                     {d.tentang.locationTitle}
                   </h3>
                 </div>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                  <Clock className="w-3 h-3" />
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20 transition-colors"
+                >
+                  <CheckCircle2 className="w-3 h-3" />
                   {d.tentang.verification}
-                </span>
+                </a>
               </div>
 
               <p className="text-xs text-gray-400 mb-4">{d.tentang.locationDesc}</p>
@@ -125,7 +134,7 @@ export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
             <div className="relative rounded-xl overflow-hidden border border-[#1a1f2e] h-64 bg-[#0a0d14]">
               <iframe
                 title={d.tentang.mapTitle}
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126359.78913936932!2d114.30138097587123!3d-8.219251299999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd154817a020d2d%3A0x4027a76e3531b20!2sBanyuwangi%2C%20Banyuwangi%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+                src={MAP_EMBED_URL}
                 width="100%"
                 height="100%"
                 style={{ border: 0, filter: "grayscale(70%) contrast(1.1) brightness(0.8)" }}
@@ -133,13 +142,15 @@ export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-              <div className="absolute inset-0 bg-[#07090d]/60 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 text-center">
-                <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center mb-3">
-                  <MapPin className="w-6 h-6 text-gold" />
-                </div>
-                <div className="text-xs font-bold text-white mb-1">{d.tentang.mapOverlayTitle}</div>
-                <div className="text-[11px] text-gray-300 max-w-xs">{d.tentang.mapOverlayDesc}</div>
-              </div>
+              <a
+                href={MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#07090d] bg-gold-gradient shadow-gold hover:brightness-110 transition-all"
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                {d.tentang.openMaps}
+              </a>
             </div>
           </div>
 
@@ -153,10 +164,15 @@ export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
                     {d.tentang.reviewsTitle}
                   </h3>
                 </div>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                  <Clock className="w-3 h-3" />
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20 transition-colors"
+                >
+                  <CheckCircle2 className="w-3 h-3" />
                   {d.tentang.waiting}
-                </span>
+                </a>
               </div>
 
               <p className="text-xs text-gray-400 mb-4">{d.tentang.reviewsDesc}</p>
@@ -167,7 +183,25 @@ export default function TentangKami({ locale = "id" }: { locale?: Locale }) {
                 <Star className="w-6 h-6 text-gold" />
               </div>
               <div className="text-sm font-semibold text-white mb-1">{d.tentang.reviewsSoon}</div>
-              <div className="text-[11px] text-gray-400 leading-relaxed">{d.tentang.reviewsSoonDesc}</div>
+              <div className="text-[11px] text-gray-400 leading-relaxed mb-4">{d.tentang.reviewsSoonDesc}</div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-gold flex-1 justify-center text-xs py-2.5"
+                >
+                  {d.tentang.viewReviews}
+                </a>
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center px-3 py-2.5 rounded-xl text-xs font-semibold text-gray-200 bg-[#131720] border border-[#1a1f2e] hover:border-gold hover:text-gold transition-all"
+                >
+                  {d.tentang.writeReview}
+                </a>
+              </div>
             </div>
 
             <div className="mt-4 pt-3 border-t border-[#1a1f2e] text-center text-[11px] text-gray-500">

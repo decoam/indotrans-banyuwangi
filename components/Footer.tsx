@@ -81,6 +81,15 @@ export default function Footer() {
               >
                 <i className="fa-brands fa-tiktok text-sm"></i>
               </a>
+              <a
+                href="https://maps.app.goo.gl/bmrBKYata9K3qGBcA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-[#131720] border border-[#1a1f2e] flex items-center justify-center hover:border-gold transition-colors"
+                aria-label="Google Maps"
+              >
+                <MapPin className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
@@ -124,7 +133,14 @@ export default function Footer() {
             <ul className="space-y-3 text-xs">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span>{d.footer.address}</span>
+                <a
+                  href="https://maps.app.goo.gl/bmrBKYata9K3qGBcA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gold transition-colors"
+                >
+                  {d.footer.address}
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-gold shrink-0" />
